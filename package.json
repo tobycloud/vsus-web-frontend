@@ -10,20 +10,22 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mantine/core": "^7.4.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "preact": "^10.19.3",
+    "@mantine/core": "^7.4.2"
   },
   "devDependencies": {
-    "@types/react": "^18.2.43",
-    "@types/react-dom": "^18.2.17",
+    "@preact/preset-vite": "^2.8.1",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
     "@typescript-eslint/parser": "^6.14.0",
-    "@vitejs/plugin-react-swc": "^3.5.0",
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "@tabler/icons-react": "^2.46.0",
+    "pocketbase": "0.20.1",
+    "postcss": "^8.4.33",
+    "postcss-preset-mantine": "^1.12.3",
+    "postcss-simple-vars": "^7.0.1",
     "typescript": "^5.2.2",
-    "vite": "^5.0.8"
+    "vite": "^5.0.11"
   }
 }
