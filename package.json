@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mantine/core": "^7.5.0",
+    "@mantine/spotlight": "^7.5.0",
     "preact": "^10.19.3",
-    "@mantine/core": "^7.4.2"
+    "react-router-dom": "^6.21.3"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.8.1",

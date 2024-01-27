@@ -6,11 +6,17 @@ settings:
 
 dependencies:
   '@mantine/core':
-    specifier: ^7.4.2
-    version: 7.4.2(@mantine/hooks@7.4.2)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^7.5.0
+    version: 7.5.0(@mantine/hooks@7.5.0)(react-dom@18.2.0)(react@18.2.0)
+  '@mantine/spotlight':
+    specifier: ^7.5.0
+    version: 7.5.0(@mantine/core@7.5.0)(@mantine/hooks@7.5.0)(react-dom@18.2.0)(react@18.2.0)
   preact:
     specifier: ^10.19.3
     version: 10.19.3
+  react-router-dom:
+    specifier: ^6.21.3
+    version: 6.21.3(react-dom@18.2.0)(react@18.2.0)
 
 devDependencies:
   '@preact/preset-vite':
@@ -647,15 +653,15 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
-  /@mantine/core@7.4.2(@mantine/hooks@7.4.2)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-kXmq7NjSd1AsOIzqPwQhA7SeZS9hrbARRqhRwr4LLR3NKps9hLmVto441DnpHH/D27eL9gGLSl4GRIdogjX6mg==}
+  /@mantine/core@7.5.0(@mantine/hooks@7.5.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-0Qfn4oLCs6Qrli+JK6Q325xhNblVEPSKOB4sDMUkvKYUlCt/2lsIhwUXarVBgiIV3X+rKccf0/LcEWmpn/dYuw==}
     peerDependencies:
-      '@mantine/hooks': 7.4.2
+      '@mantine/hooks': 7.5.0
       react: ^18.2.0
       react-dom: ^18.2.0
     dependencies:
       '@floating-ui/react': 0.24.8(react-dom@18.2.0)(react@18.2.0)
-      '@mantine/hooks': 7.4.2(react@18.2.0)
+      '@mantine/hooks': 7.5.0(react@18.2.0)
       clsx: 2.0.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -667,8 +673,31 @@ packages:
       - '@types/react'
     dev: false
 
-  /@mantine/hooks@7.4.2(react@18.2.0):
-    resolution: {integrity: sha512-tNtn/SNOtSmjLQmIk4S5nsTJjV84Oj0AUYRrAN78HHw3bfWp6bdWbgYPtPEH9e6iFJfdxiX0hrLfWqROalAsbQ==}
+  /@mantine/hooks@7.5.0(react@18.2.0):
+    resolution: {integrity: sha512-KCL/RRMO+9HRIaNww3RIykifWL9XHovnANAyaCU2YUHOPyGCLSXs1UfFxsKNU71HaZ7cHwqSd7J0rR8JpVYLxw==}
+    peerDependencies:
+      react: ^18.2.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
+  /@mantine/spotlight@7.5.0(@mantine/core@7.5.0)(@mantine/hooks@7.5.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-yA/heRWxhe3A/j3wEGrAj+6F02CeJVbdxZce1XuHOHWnE74KGSFnRqAFWmsEoZCZ889B3vSIb6Zx00VKRRy6WQ==}
+    peerDependencies:
+      '@mantine/core': 7.5.0
+      '@mantine/hooks': 7.5.0
+      react: ^18.2.0
+      react-dom: ^18.2.0
+    dependencies:
+      '@mantine/core': 7.5.0(@mantine/hooks@7.5.0)(react-dom@18.2.0)(react@18.2.0)
+      '@mantine/hooks': 7.5.0(react@18.2.0)
+      '@mantine/store': 7.5.0(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@mantine/store@7.5.0(react@18.2.0):
+    resolution: {integrity: sha512-NvPS6ERKxHGnkIEY8ip/v3ySYYPQlJq6KtSSXALlJ/BdyezBTsBrkEkEgJxJcYK5H4TYr9jDjLYNL3PQy4GHxg==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
@@ -751,6 +780,11 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@remix-run/router@1.14.2:
+    resolution: {integrity: sha512-ACXpdMM9hmKZww21yEqWwiLws/UPLhNKvimN8RrYSqPSvB3ov7sLvAcfvaxePeLvccTQKGdkDIhLYApZVDFuKg==}
+    engines: {node: '>=14.0.0'}
+    dev: false
 
   /@rollup/pluginutils@4.2.1:
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
@@ -2062,6 +2096,29 @@ packages:
       tslib: 2.6.2
       use-callback-ref: 1.3.1(react@18.2.0)
       use-sidecar: 1.1.2(react@18.2.0)
+    dev: false
+
+  /react-router-dom@6.21.3(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-kNzubk7n4YHSrErzjLK72j0B5i969GsuCGazRl3G6j1zqZBLjuSlYBdVdkDOgzGdPIffUOc9nmgiadTEVoq91g==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.14.2
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-router: 6.21.3(react@18.2.0)
+    dev: false
+
+  /react-router@6.21.3(react@18.2.0):
+    resolution: {integrity: sha512-a0H638ZXULv1OdkmiK6s6itNhoy33ywxmUFT/xtSoVyf9VnC7n7+VT4LjVzdIHSaF5TIh9ylUgxMXksHTgGrKg==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.14.2
+      react: 18.2.0
     dev: false
 
   /react-style-singleton@2.2.1(react@18.2.0):

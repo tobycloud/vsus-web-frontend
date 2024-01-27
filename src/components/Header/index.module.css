@@ -1,0 +1,6 @@
+.header {
+  background-color: var(--mantine-color-vsus-natural-6);
+  height: rem(60px);
+  padding-left: var(--mantine-spacing-md);
+  padding-right: var(--mantine-spacing-md);
+}
