@@ -19,7 +19,7 @@ export default function ForgotPassword() {
         {/* double xl on purpose */}
         <Box style={{ alignItems: "center", flexDirection: "column" }} display="flex">
           <Box display="flex" style={{ alignItems: "center" }} mb="lg">
-            <Image src="images/icons/vsus.svg" w="50px" h="auto" alt="logo" />
+            <Image src="../../images/icons/vsus.svg" w="50px" h="auto" alt="logo" />
             <Title order={1} ml="md">
               vSuS
             </Title>
@@ -57,7 +57,7 @@ export default function ForgotPassword() {
         </Box>
         <Text size="sm" weight={700} align="center" mt="xl">
           Remembered your password? Awesome!{" "}
-          <Link to="/signin" style={{ color: "var(--mantine-color-vsus-text-7)", textDecoration: "none" }}>
+          <Link to="/auth/signin" style={{ color: "var(--mantine-color-vsus-text-7)", textDecoration: "none" }}>
             Sign in
           </Link>
         </Text>

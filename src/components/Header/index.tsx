@@ -1,78 +1,34 @@
-import {
-  ActionIcon,
-  Avatar,
-  Box,
-  Combobox,
-  Flex,
-  Group,
-  Image,
-  Input,
-  InputBase,
-  Text,
-  Title,
-  Tooltip,
-  UnstyledButton,
-  rem,
-  useCombobox,
-} from "@mantine/core";
+import { ActionIcon, Avatar, Box, Flex, Group, Image, Text, Title, Tooltip, UnstyledButton, rem } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { spotlight } from "@mantine/spotlight";
-import { IconDeviceDesktop, IconPlus, IconSearch } from "@tabler/icons-react";
-import { useState } from "preact/hooks";
+import { IconPlus, IconSearch } from "@tabler/icons-react";
+import { useEffect, useState } from "preact/hooks";
 import { Link } from "react-router-dom";
+import pocketbase, { getImageURL } from "../../database";
+import { User } from "../../database/models";
 import NavBar from "../NavBar";
 import SearchMenu from "../SearchMenu";
+import WorkspacesCombobox from "../WorkspacesCombobox";
 import classes from "./index.module.css";
 
 export function Header() {
-  const workspaces = [
-    {
-      id: "RECORD_ID",
-      collectionId: "8ns6dvelf7xqlks",
-      collectionName: "workspaces",
-      created: "2022-01-01 01:00:00.123Z",
-      updated: "2022-01-01 23:59:59.456Z",
-      name: "test",
-      owner: "RELATION_RECORD_ID",
-    },
-  ];
-
   const isMobile = useMediaQuery("(max-width: 62em)");
+
+  const user: User = pocketbase.authStore.model as User;
 
   const [opened, { open, close }] = useDisclosure(false);
 
-  const combobox = useCombobox({
-    onDropdownClose: () => combobox.resetSelectedOption(),
-  });
+  const [avatar, setAvatar] = useState<string | null>(null);
 
-  const [workspaceSelected, setWorkspaceSelected] = useState<string | null>(null);
+  useEffect(() => {
+    const getAvatar = async () => {
+      if (!user) return;
+      const url = await getImageURL(user);
+      setAvatar(url);
+    };
 
-  const options = workspaces.map((item, index) => (
-    <Combobox.Option value={item.name} key={item.name}>
-      <Group gap={0}>
-        <Flex direction={"column"} align={"center"}>
-          <IconDeviceDesktop size={30} />
-          <Text mt={5}>{index}</Text>
-        </Flex>
-        <Box ml="sm">
-          <Text size="xl">{item.name}</Text>
-          <Text size="xs" c="lightgrey">
-            vCPUs:
-          </Text>
-          <Text size="xs" c="lightgrey">
-            vRAMs:
-          </Text>
-          <Text size="xs" c="lightgrey">
-            Storage:
-          </Text>
-        </Box>
-      </Group>
-    </Combobox.Option>
-  ));
-
-  // useEffect(() => {
-  //   setWorkspaceSelected(workspaces[0]);
-  // }, []);
+    getAvatar();
+  }, []);
 
   return (
     <>
@@ -81,39 +37,14 @@ export function Header() {
           <Group flex={!isMobile ? 1 : 0}>
             <Link to="/" style={{ color: "white", textDecoration: "none" }}>
               <Group gap={0}>
-                <Image src="/images/icons/vsus.svg" alt="vSuS" h={35} style={{ pointerEvents: "none", userSelect: "none" }} />
+                <Image src="/../images/icons/vsus.svg" alt="vSuS" h={35} style={{ pointerEvents: "none", userSelect: "none" }} />
                 <Title order={3} ml="xs" style={{ pointerEvents: "none", userSelect: "none" }}>
                   vSuS
                 </Title>
               </Group>
             </Link>
             <Group gap={0} visibleFrom="xl">
-              <Combobox
-                store={combobox}
-                onOptionSubmit={(val) => {
-                  setWorkspaceSelected(val);
-                  combobox.closeDropdown();
-                }}
-              >
-                <Combobox.Target>
-                  <InputBase
-                    w={250}
-                    ml="xl"
-                    variant="filled"
-                    component="button"
-                    type="button"
-                    pointer
-                    rightSection={<Combobox.Chevron />}
-                    rightSectionPointerEvents="none"
-                    onClick={() => combobox.toggleDropdown()}
-                  >
-                    {workspaceSelected || <Input.Placeholder>Select a workspace</Input.Placeholder>}
-                  </InputBase>
-                </Combobox.Target>
-                <Combobox.Dropdown>
-                  <Combobox.Options>{options}</Combobox.Options>
-                </Combobox.Dropdown>
-              </Combobox>
+              <WorkspacesCombobox user={user} />
               <Tooltip label="Create a new workspace" color="primary" openDelay={250}>
                 <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg" ml="xs">
                   <IconPlus size={20} />
@@ -132,12 +63,12 @@ export function Header() {
             </UnstyledButton>
           </Group>
           <Group flex={!isMobile ? 1 : 0}>
-            <Avatar src="" onClick={open} ml="auto" />
+            <Avatar src={avatar} onClick={open} ml="auto" />
           </Group>
         </Flex>
       </header>
       <SearchMenu />
-      <NavBar opened={opened} close={close} />
+      <NavBar opened={opened} close={close} username={user?.username} name={user?.name} avatar={avatar} />
     </>
   );
 }

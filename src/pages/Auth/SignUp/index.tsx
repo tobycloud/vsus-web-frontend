@@ -1,7 +1,9 @@
-import { Box, Button, Center, Image, Input, PasswordInput, Text, Title } from "@mantine/core";
+import { Alert, Box, Button, Center, Image, Input, PasswordInput, Text, Title } from "@mantine/core";
 import { hasLength, isEmail, useForm } from "@mantine/form";
 import { IconAt, IconKey, IconReload, IconUser } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
+import { useState } from "preact/hooks";
+import { Link, useNavigate } from "react-router-dom";
+import { userSignUp } from "../../../database";
 
 export default function SignUp() {
   const form = useForm({
@@ -19,13 +21,17 @@ export default function SignUp() {
     },
   });
 
+  const [errorDuringSignUp, setErrorDuringSignUp] = useState("");
+
+  const navigate = useNavigate();
+
   return (
     <Center p="xl">
       <Box p="xl">
         {/* double xl on purpose */}
         <Box style={{ alignItems: "center", flexDirection: "column" }} display="flex">
           <Box display="flex" style={{ alignItems: "center" }} mb="lg">
-            <Image src="images/icons/vsus.svg" w="50px" h="auto" alt="logo" />
+            <Image src="../../images/icons/vsus.svg" w="50px" h="auto" alt="logo" />
             <Title order={1} ml="md">
               vSuS
             </Title>
@@ -34,7 +40,11 @@ export default function SignUp() {
             Create a new account
           </Text>
         </Box>
-
+        {!!errorDuringSignUp && (
+          <Alert variant="light" color="red" title="Error!" mt="xl">
+            {errorDuringSignUp}
+          </Alert>
+        )}
         <Box
           component="form"
           display="flex"
@@ -47,7 +57,21 @@ export default function SignUp() {
           p="lg"
           h="min-content"
           mt="xl"
-          onSubmit={form.onSubmit(async () => {})}
+          onSubmit={form.onSubmit(async () => {
+            try {
+              const data = {
+                email: form.values.email,
+                username: form.values.username,
+                password: form.values.password,
+                passwordConfirm: form.values.password2,
+              };
+              await userSignUp(data);
+              navigate("/auth/signin?accountCreated=true");
+            } catch (error) {
+              form.reset();
+              setErrorDuringSignUp("This email or username may already be in use.");
+            }
+          })}
         >
           <Input
             variant="filled"
@@ -97,7 +121,7 @@ export default function SignUp() {
         </Box>
         <Text size="sm" weight={700} align="center" mt="xl">
           Already have an account?{" "}
-          <Link to="/signin" style={{ color: "var(--mantine-color-vsus-text-7)", textDecoration: "none" }}>
+          <Link to="/auth/signin" style={{ color: "var(--mantine-color-vsus-text-7)", textDecoration: "none" }}>
             Sign in
           </Link>
         </Text>

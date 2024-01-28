@@ -2,6 +2,7 @@ import { MantineProvider } from "@mantine/core";
 import { RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./app.css";
 import Content from "./components/Content";
+import AuthContent from "./components/Content/Auth";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import EnterResetPasswordCode from "./pages/Auth/ForgotPassword/EnterCode";
 import ResetPassword from "./pages/Auth/ForgotPassword/ResetPassword";
@@ -21,24 +22,30 @@ const routes: RouteObject[] = [
     ],
   },
   {
-    path: "/signin",
-    element: <SignIn />,
-  },
-  {
-    path: "/signup",
-    element: <SignUp />,
-  },
-  {
-    path: "/forgot-password",
-    element: <ForgotPassword />,
-  },
-  {
-    path: "/forgot-password/enter-code",
-    element: <EnterResetPasswordCode />,
-  },
-  {
-    path: "/forgot-password/reset-password",
-    element: <ResetPassword />,
+    path: "/auth",
+    element: <AuthContent />,
+    children: [
+      {
+        path: "/auth/signin",
+        element: <SignIn />,
+      },
+      {
+        path: "/auth/signup",
+        element: <SignUp />,
+      },
+      {
+        path: "/auth/forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "/auth/forgot-password/enter-code",
+        element: <EnterResetPasswordCode />,
+      },
+      {
+        path: "/auth/forgot-password/reset-password",
+        element: <ResetPassword />,
+      },
+    ],
   },
 ];
 
