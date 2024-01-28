@@ -1,4 +1,4 @@
-.content {
+#app {
   color: white;
   min-height: 100vh;
   background-color: var(--mantine-color-dark-9);
