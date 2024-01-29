@@ -1,0 +1,10 @@
+.inputBox {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--mantine-color-dark-8);
+    border-radius: 12px;
+    width: 340px;
+    padding: var(--mantine-spacing-lg);
+    height: min-content;
+    margin-top: var(--mantine-spacing-xl)
+}
