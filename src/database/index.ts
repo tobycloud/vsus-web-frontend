@@ -11,8 +11,14 @@ export async function userSignIn(email: string, password: string) {
 }
 
 export async function userSignInOAuth2(provider: string) {
+  let w = window.open();
   pocketbase.authStore.clear();
-  await pocketbase.collection("users").authWithOAuth2({ provider });
+  await pocketbase.collection("users").authWithOAuth2({
+    provider,
+    urlCallback: (url) => {
+      if (w) w.location.href = url;
+    },
+  });
 }
 
 export async function userSignUp(data: Object) {

@@ -6,7 +6,7 @@ import AuthContent from "./components/Content/Auth";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import EnterResetPasswordCode from "./pages/Auth/ForgotPassword/EnterCode";
 import ResetPassword from "./pages/Auth/ForgotPassword/ResetPassword";
-import LogIn from "./pages/Auth/SignIn";
+import SignIn from "./pages/Auth/SignIn";
 import SignUp from "./pages/Auth/SignUp";
 import Home from "./pages/Home";
 
@@ -25,11 +25,11 @@ const routes: RouteObject[] = [
     element: <AuthContent />,
     children: [
       {
-        path: "/login",
-        element: <LogIn />,
+        path: "/auth/signin",
+        element: <SignIn />,
       },
       {
-        path: "/signup",
+        path: "/auth/signup",
         element: <SignUp />,
       },
       {

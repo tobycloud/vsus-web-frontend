@@ -1,11 +1,12 @@
-import { Alert, Avatar, Box, Button, Center, Divider, Group, Image, Input, PasswordInput, Text, Title } from "@mantine/core";
+import { Alert, Box, Button, Center, Divider, Group, Image, Input, PasswordInput, Text, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconAt, IconKey } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
 import { Link, useNavigate } from "react-router-dom";
-import pocketbase, { userSignIn, userSignInOAuth2 } from "../../../database";
+import pocketbase, { userSignIn } from "../../../database";
+import SocialButton from "./SocialButton";
 
-export default function LogIn() {
+export default function SignIn() {
   const form = useForm({
     initialValues: {
       email: "",
@@ -28,7 +29,7 @@ export default function LogIn() {
       <Box p="xl">
         {/* double xl on purpose */}
         <Box style={{ alignItems: "center", flexDirection: "column" }} display="flex">
-          <Box display="flex" style={{ alignItems: "center" }} mb="lg">
+          <Box display="flex" style={{ alignItems: "center", pointerEvents: "none" }} mb="lg">
             <Image src="/images/icons/vsus.svg" w="50px" h="auto" alt="logo" />
             <Title order={1} ml="md">
               vSuS
@@ -115,54 +116,9 @@ export default function LogIn() {
             Or continue with
           </Text>
           <Group display={"flex"} style={{ justifyContent: "space-around" }} mt="lg">
-            <Avatar
-              size="lg"
-              radius="xl"
-              alt="Discord"
-              style={{ cursor: "pointer" }}
-              onClick={async () => {
-                try {
-                  await userSignInOAuth2("discord");
-                  navigate("/");
-                } catch (error) {
-                  setErrorDuringSignIn((error as Error).message);
-                }
-              }}
-            >
-              <Image src="/images/icons/socials/discord.svg" alt="Discord" p="xs" />
-            </Avatar>
-            <Avatar
-              size="lg"
-              radius="xl"
-              alt="GitHub"
-              style={{ cursor: "pointer" }}
-              onClick={async () => {
-                try {
-                  await userSignInOAuth2("github");
-                  navigate("/");
-                } catch (error) {
-                  setErrorDuringSignIn((error as Error).message);
-                }
-              }}
-            >
-              <Image src="/images/icons/socials/github.svg" alt="GitHub" p="xs" />
-            </Avatar>
-            <Avatar
-              size="lg"
-              radius="xl"
-              alt="Google"
-              style={{ cursor: "pointer" }}
-              onClick={async () => {
-                try {
-                  await userSignInOAuth2("google");
-                  navigate("/");
-                } catch (error) {
-                  console.error(error);
-                }
-              }}
-            >
-              <Image src="/images/icons/socials/google.svg" alt="Google" p="xs" />
-            </Avatar>
+            {["Discord", "GitHub", "Google"].map((name) => (
+              <SocialButton name={name} setErrorDuringSignIn={setErrorDuringSignIn} />
+            ))}
           </Group>
         </Box>
       </Box>

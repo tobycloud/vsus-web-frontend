@@ -30,7 +30,7 @@ export default function SignUp() {
       <Box p="xl">
         {/* double xl on purpose */}
         <Box style={{ alignItems: "center", flexDirection: "column" }} display="flex">
-          <Box display="flex" style={{ alignItems: "center" }} mb="lg">
+          <Box display="flex" style={{ alignItems: "center", pointerEvents: "none" }} mb="lg">
             <Image src="../../images/icons/vsus.svg" w="50px" h="auto" alt="logo" />
             <Title order={1} ml="md">
               vSuS
@@ -65,7 +65,7 @@ export default function SignUp() {
                 password: form.values.password,
                 passwordConfirm: form.values.password2,
               });
-              navigate("/login?accountCreated=true");
+              navigate("/auth/signin?accountCreated=true");
             } catch (error) {
               form.reset();
               setErrorDuringSignUp("This email or username may already be in use.");
@@ -120,7 +120,7 @@ export default function SignUp() {
         </Box>
         <Text size="sm" weight={700} align="center" mt="xl">
           Already have an account?{" "}
-          <Link to="/login" style={{ color: "var(--mantine-color-vsus-text-7)", textDecoration: "none" }}>
+          <Link to="/auth/signin" style={{ color: "var(--mantine-color-vsus-text-7)", textDecoration: "none" }}>
             Sign in
           </Link>
         </Text>
