@@ -48,7 +48,7 @@ export default function EnterResetPasswordCode() {
         </Box>
         <Text size="sm" weight={700} align="center" mt="xl">
           Remembered your password? Awesome!{" "}
-          <Link to="/auth/signin" style={{ color: "var(--mantine-color-vsus-text-7)", textDecoration: "none" }}>
+          <Link to="/login" style={{ color: "var(--mantine-color-vsus-text-7)", textDecoration: "none" }}>
             Sign in
           </Link>
         </Text>

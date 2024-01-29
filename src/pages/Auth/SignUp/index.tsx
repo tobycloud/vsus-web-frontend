@@ -59,14 +59,13 @@ export default function SignUp() {
           mt="xl"
           onSubmit={form.onSubmit(async () => {
             try {
-              const data = {
+              await userSignUp({
                 email: form.values.email,
                 username: form.values.username,
                 password: form.values.password,
                 passwordConfirm: form.values.password2,
-              };
-              await userSignUp(data);
-              navigate("/auth/signin?accountCreated=true");
+              });
+              navigate("/login?accountCreated=true");
             } catch (error) {
               form.reset();
               setErrorDuringSignUp("This email or username may already be in use.");
@@ -121,7 +120,7 @@ export default function SignUp() {
         </Box>
         <Text size="sm" weight={700} align="center" mt="xl">
           Already have an account?{" "}
-          <Link to="/auth/signin" style={{ color: "var(--mantine-color-vsus-text-7)", textDecoration: "none" }}>
+          <Link to="/login" style={{ color: "var(--mantine-color-vsus-text-7)", textDecoration: "none" }}>
             Sign in
           </Link>
         </Text>

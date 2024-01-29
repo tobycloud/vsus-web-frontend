@@ -82,7 +82,7 @@ export default function NavBar({
               onClick={() => {
                 closeSignOutModal();
                 pocketbase.authStore.clear();
-                navigate("/auth/signin");
+                navigate("/login");
               }}
             >
               Sign out

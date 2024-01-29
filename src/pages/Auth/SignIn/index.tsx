@@ -5,7 +5,7 @@ import { useEffect, useState } from "preact/hooks";
 import { Link, useNavigate } from "react-router-dom";
 import pocketbase, { userSignIn, userSignInOAuth2 } from "../../../database";
 
-export default function SignIn() {
+export default function LogIn() {
   const form = useForm({
     initialValues: {
       email: "",
@@ -29,7 +29,7 @@ export default function SignIn() {
         {/* double xl on purpose */}
         <Box style={{ alignItems: "center", flexDirection: "column" }} display="flex">
           <Box display="flex" style={{ alignItems: "center" }} mb="lg">
-            <Image src="../../images/icons/vsus.svg" w="50px" h="auto" alt="logo" />
+            <Image src="/images/icons/vsus.svg" w="50px" h="auto" alt="logo" />
             <Title order={1} ml="md">
               vSuS
             </Title>
@@ -129,7 +129,7 @@ export default function SignIn() {
                 }
               }}
             >
-              <Image src="../../images/icons/socials/discord.svg" alt="Discord" p="xs" />
+              <Image src="/images/icons/socials/discord.svg" alt="Discord" p="xs" />
             </Avatar>
             <Avatar
               size="lg"
@@ -145,7 +145,7 @@ export default function SignIn() {
                 }
               }}
             >
-              <Image src="../../images/icons/socials/github.svg" alt="GitHub" p="xs" />
+              <Image src="/images/icons/socials/github.svg" alt="GitHub" p="xs" />
             </Avatar>
             <Avatar
               size="lg"
@@ -161,7 +161,7 @@ export default function SignIn() {
                 }
               }}
             >
-              <Image src="../../images/icons/socials/google.svg" alt="Google" p="xs" />
+              <Image src="/images/icons/socials/google.svg" alt="Google" p="xs" />
             </Avatar>
           </Group>
         </Box>

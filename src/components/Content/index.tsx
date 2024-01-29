@@ -8,7 +8,7 @@ export default function Content() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!pocketbase.authStore.isValid) navigate("/auth/signin");
+    if (pocketbase.authStore.model === null) navigate("/login");
   });
 
   return (
