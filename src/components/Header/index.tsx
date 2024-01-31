@@ -1,7 +1,7 @@
-import { ActionIcon, Avatar, Box, Flex, Group, Image, Text, Title, Tooltip, UnstyledButton, rem } from "@mantine/core";
+import { ActionIcon, Avatar, Box, Code, Flex, Group, Image, Indicator, Text, Title, Tooltip, UnstyledButton, rem } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { spotlight } from "@mantine/spotlight";
-import { IconPlus, IconSearch } from "@tabler/icons-react";
+import { IconInbox, IconPlus, IconSearch } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
 import { Link } from "react-router-dom";
 import pocketbase, { getImageURL } from "../../database";
@@ -34,7 +34,7 @@ export function Header() {
     <>
       <header className={classes.header}>
         <Flex justify="space-between" h="100%">
-          <Group flex={!isMobile ? 1 : 0}>
+          <Group flex={!isMobile ? 1.5 : "none"}>
             <Link to="/" style={{ color: "white", textDecoration: "none" }}>
               <Group gap={0}>
                 <Image src="/../images/icons/vsus.svg" alt="vSuS" h={35} style={{ pointerEvents: "none", userSelect: "none" }} />
@@ -43,7 +43,7 @@ export function Header() {
                 </Title>
               </Group>
             </Link>
-            <Group gap={0} visibleFrom="xl">
+            <Group gap={0} visibleFrom="sm">
               <WorkspacesCombobox user={user} />
               <Tooltip label="Create a new workspace" color="primary" openDelay={250}>
                 <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg" ml="xs">
@@ -52,18 +52,32 @@ export function Header() {
               </Tooltip>
             </Group>
           </Group>
-          <Group visibleFrom="lg" flex={1}>
+          <Group visibleFrom="lg" flex={!isMobile ? 1 : "none"}>
             <UnstyledButton variant="light" color="vsus-button" onClick={spotlight.open} mr="auto" ml="auto">
-              <Box style={{ borderRadius: "12px", backgroundColor: "#0E363C" }}>
-                <Group style={{ padding: "10px 50px 10px 50px" }}>
+              <Box style={{ borderRadius: "5px", backgroundColor: "#0E363C" }}>
+                <Group style={{ padding: "10px 35px 10px 35px" }}>
                   <IconSearch style={{ width: rem(20), height: rem(20), color: "#E0E0E0" }} stroke={1.5} />
-                  <Text style={{ color: "#E0E0E0" }}>Search for your workspaces, etc.</Text>
+                  <Text size="sm" style={{ color: "#E0E0E0" }}>
+                    Press <Code>Ctrl + K</Code> to search
+                  </Text>
                 </Group>
               </Box>
             </UnstyledButton>
           </Group>
-          <Group flex={!isMobile ? 1 : 0}>
-            <Avatar src={avatar} onClick={open} ml="auto" />
+          <Group flex={!isMobile ? 1.5 : "none"} justify="flex-end">
+            <Tooltip label="You have 2 unread notifications" color="primary" openDelay={250}>
+              <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg" hiddenFrom="lg" onClick={spotlight.open}>
+                <IconSearch size={20} />
+              </ActionIcon>
+            </Tooltip>
+            <Indicator color="red" size={15} withBorder>
+              <Tooltip label="You have 2 unread notifications" color="primary" openDelay={250}>
+                <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg">
+                  <IconInbox size={20} />
+                </ActionIcon>
+              </Tooltip>
+            </Indicator>
+            <Avatar src={avatar} onClick={open} />
           </Group>
         </Flex>
       </header>

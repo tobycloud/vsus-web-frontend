@@ -23,7 +23,7 @@ export default function WorkspacesCombobox({ user }: { user: User }) {
   }, []);
 
   const options = workspaces.map((item, index) => (
-    <Combobox.Option value={item.name} key={item.name}>
+    <Combobox.Option value={item.name} key={item.name} w="100%" maw="320px">
       <Group gap={0}>
         <Flex direction={"column"} align={"center"} w="max-content">
           <IconDeviceDesktop size={30} />
@@ -70,7 +70,7 @@ export default function WorkspacesCombobox({ user }: { user: User }) {
           {workspaceSelected || <Input.Placeholder>{workspaces.length === 0 ? "No workspace" : "Select a workspace"}</Input.Placeholder>}
         </InputBase>
       </Combobox.Target>
-      <Combobox.Dropdown>
+      <Combobox.Dropdown style={{ border: "none" }}>
         <Combobox.Options>{options}</Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>

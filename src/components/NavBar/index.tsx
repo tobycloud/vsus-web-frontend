@@ -1,6 +1,16 @@
 import { Avatar, Box, Button, Divider, Drawer, Flex, Group, Modal, NavLink, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconBook2, IconDeviceDesktop, IconLogout, IconServer2, IconSettings, IconSpeakerphone, IconUpload, IconUsers } from "@tabler/icons-react";
+import {
+  IconBook2,
+  IconDeviceDesktop,
+  IconDeviceDesktopBolt,
+  IconLogout,
+  IconServer2,
+  IconSettings,
+  IconSpeakerphone,
+  IconUpload,
+  IconUsers,
+} from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import pocketbase from "../../database";
 
@@ -42,6 +52,8 @@ export default function NavBar({
             <Drawer.CloseButton />
           </Drawer.Header>
           <Drawer.Body>
+            <NavLink label="Current workspace" leftSection={<IconDeviceDesktopBolt size="1rem" stroke={1.5} />} onClick={() => {}} hiddenFrom="sm" />
+            <Divider mt={10} mb={10} hiddenFrom="sm" />
             <NavLink label="Your workspaces" leftSection={<IconDeviceDesktop size="1rem" stroke={1.5} />} onClick={() => {}} />
             <NavLink label="Your instances" leftSection={<IconServer2 size="1rem" stroke={1.5} />} onClick={() => {}} />
             <Divider mt={10} mb={10} />

@@ -1,21 +1,28 @@
 import { rem } from "@mantine/core";
 import { Spotlight, SpotlightActionData } from "@mantine/spotlight";
-import { IconCpu, IconDashboard, IconSearch } from "@tabler/icons-react";
+import { IconDashboard, IconDeviceDesktop, IconSearch, IconServer2 } from "@tabler/icons-react";
 
 const actions: SpotlightActionData[] = [
   {
     id: "dashboard",
     label: "Dashboard",
-    description: "'Dashing through the snow~'",
+    description: "Overview of workspaces and data.",
     onClick: () => {},
     leftSection: <IconDashboard style={{ width: rem(24), height: rem(24) }} stroke={1.5} />,
   },
   {
     id: "Workspaces",
     label: "Workspaces",
-    description: "Where you can create and manage your projects.",
+    description: "Control virtual machine workspaces efficiently.",
     onClick: () => {},
-    leftSection: <IconCpu style={{ width: rem(24), height: rem(24) }} stroke={1.5} />,
+    leftSection: <IconDeviceDesktop style={{ width: rem(24), height: rem(24) }} stroke={1.5} />,
+  },
+  {
+    id: "Instances",
+    label: "Instances",
+    description: "Manage virtual machine instances effortlessly.",
+    onClick: () => {},
+    leftSection: <IconServer2 style={{ width: rem(24), height: rem(24) }} stroke={1.5} />,
   },
 ];
 
