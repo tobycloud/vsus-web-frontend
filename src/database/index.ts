@@ -26,7 +26,7 @@ export async function userSignUp(data: Object) {
   await pocketbase.collection("users").create(data);
 }
 
-export async function getImageURL(user: User) {
+export async function getAvatar(user: User) {
   return await pocketbase.getFileUrl(user, user.avatar);
 }
 
@@ -34,4 +34,12 @@ export async function getWorkspaces(user: User) {
   return await pocketbase.collection("workspaces").getFullList({
     filter: `owner = "${user.id}"`,
   });
+}
+
+export async function getLimitWorkspaces(user: User, min: number, max: number) {
+  const listResult = await pocketbase.collection("workspaces").getList(min, max, {
+    sort: "-updated",
+    filter: `owner = "${user.id}"`,
+  });
+  return listResult.items;
 }

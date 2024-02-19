@@ -8,7 +8,8 @@ export interface User {
   avatar: string;
   pronouns: string;
   created: string;
-  phoneNumber: number;
+  phoneNumber: string;
+  phoneNumberVisibility: boolean;
   plan: string;
   location: string;
   organization: string;

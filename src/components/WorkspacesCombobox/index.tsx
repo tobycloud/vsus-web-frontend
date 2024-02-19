@@ -1,8 +1,8 @@
 import { Box, Combobox, Flex, Group, Input, InputBase, Text, useCombobox } from "@mantine/core";
-import { IconDeviceDesktop } from "@tabler/icons-react";
+import { IconDeviceDesktop, IconDeviceDesktopPlus } from "@tabler/icons-react";
 import { RecordModel } from "pocketbase";
 import { useEffect, useState } from "preact/hooks";
-import { getWorkspaces } from "../../database";
+import { getLimitWorkspaces } from "../../database";
 import { User } from "../../database/models";
 
 export default function WorkspacesCombobox({ user }: { user: User }) {
@@ -16,7 +16,7 @@ export default function WorkspacesCombobox({ user }: { user: User }) {
 
   useEffect(() => {
     const fetchWorkspaces = async () => {
-      setWorkspaces(await getWorkspaces(user));
+      setWorkspaces(await getLimitWorkspaces(user, 0, 5));
     };
 
     fetchWorkspaces();
@@ -71,7 +71,21 @@ export default function WorkspacesCombobox({ user }: { user: User }) {
         </InputBase>
       </Combobox.Target>
       <Combobox.Dropdown style={{ border: "none" }}>
-        <Combobox.Options>{options}</Combobox.Options>
+        <Combobox.Options>
+          {options}
+          <Combobox.Option value="" w="100%" maw="320px">
+            <Group gap={0}>
+              <Flex direction={"column"} align={"center"} w="max-content">
+                <IconDeviceDesktopPlus size={30} />
+              </Flex>
+              <Box ml="sm" maw={178}>
+                <Text size="md" lineClamp={1}>
+                  View all
+                </Text>
+              </Box>
+            </Group>
+          </Combobox.Option>
+        </Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>
   );

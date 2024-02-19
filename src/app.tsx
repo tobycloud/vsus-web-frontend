@@ -9,6 +9,7 @@ import ResetPassword from "./pages/Auth/ForgotPassword/ResetPassword";
 import SignIn from "./pages/Auth/SignIn";
 import SignUp from "./pages/Auth/SignUp";
 import Home from "./pages/Home";
+import SettingsPreferences from "./pages/Settings/Preferences";
 
 const routes: RouteObject[] = [
   {
@@ -18,6 +19,10 @@ const routes: RouteObject[] = [
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/settings/preferences",
+        element: <SettingsPreferences />,
       },
     ],
   },

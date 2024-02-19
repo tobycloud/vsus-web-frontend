@@ -4,7 +4,7 @@ import { spotlight } from "@mantine/spotlight";
 import { IconInbox, IconPlus, IconSearch } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
 import { Link } from "react-router-dom";
-import pocketbase, { getImageURL } from "../../database";
+import pocketbase, { getAvatar } from "../../database";
 import { User } from "../../database/models";
 import NavBar from "../NavBar";
 import SearchMenu from "../SearchMenu";
@@ -14,35 +14,33 @@ import classes from "./index.module.css";
 export function Header() {
   const isMobile = useMediaQuery("(max-width: 62em)");
 
-  const user: User = pocketbase.authStore.model as User;
+  const user = pocketbase.authStore.model as User;
 
   const [opened, { open, close }] = useDisclosure(false);
 
   const [avatar, setAvatar] = useState<string | null>(null);
 
   useEffect(() => {
-    const getAvatar = async () => {
+    const getUserAvatar = async () => {
       if (!user) return;
-      const url = await getImageURL(user);
+      const url = await getAvatar(user);
       setAvatar(url);
     };
 
-    getAvatar();
-  }, []);
+    getUserAvatar();
+  }, [user]);
 
   return (
     <>
-      <header className={classes.header}>
+      <header className={classes.header} style={{ borderBottom: "calc(0.0625rem*var(--mantine-scale)) solid var(--_app-shell-border-color)" }}>
         <Flex justify="space-between" h="100%">
           <Group flex={!isMobile ? 1.5 : "none"}>
-            <Link to="/" style={{ color: "white", textDecoration: "none" }}>
-              <Group gap={0}>
-                <Image src="/../images/icons/vsus.svg" alt="vSuS" h={35} style={{ pointerEvents: "none", userSelect: "none" }} />
-                <Title order={3} ml="xs" style={{ pointerEvents: "none", userSelect: "none" }}>
-                  vSuS
-                </Title>
-              </Group>
-            </Link>
+            <Group gap={0} component={Link} to="/" style={{ color: "white", textDecoration: "none" }} w={92.75}>
+              <Image src="/../images/icons/vsus.svg" alt="vSuS" h={35} style={{ pointerEvents: "none", userSelect: "none" }} />
+              <Title order={3} ml="xs" style={{ pointerEvents: "none", userSelect: "none" }}>
+                vSuS
+              </Title>
+            </Group>
             <Group gap={0} visibleFrom="sm">
               <WorkspacesCombobox user={user} />
               <Tooltip label="Create a new workspace" color="primary" openDelay={250}>
@@ -65,13 +63,11 @@ export function Header() {
             </UnstyledButton>
           </Group>
           <Group flex={!isMobile ? 1.5 : "none"} justify="flex-end">
-            <Tooltip label="You have 2 unread notifications" color="primary" openDelay={250}>
-              <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg" hiddenFrom="lg" onClick={spotlight.open}>
-                <IconSearch size={20} />
-              </ActionIcon>
-            </Tooltip>
-            <Indicator color="red" size={15} withBorder>
-              <Tooltip label="You have 2 unread notifications" color="primary" openDelay={250}>
+            <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg" hiddenFrom="lg" onClick={spotlight.open}>
+              <IconSearch size={20} />
+            </ActionIcon>
+            <Indicator color="red" size={15} withBorder disabled>
+              <Tooltip label="You have no unread notifications" color="primary" openDelay={250}>
                 <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg">
                   <IconInbox size={20} />
                 </ActionIcon>
@@ -86,3 +82,5 @@ export function Header() {
     </>
   );
 }
+
+Header.defaultProps = { inSettings: false };

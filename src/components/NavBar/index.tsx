@@ -11,7 +11,7 @@ import {
   IconUpload,
   IconUsers,
 } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import pocketbase from "../../database";
 
 export default function NavBar({
@@ -51,18 +51,37 @@ export default function NavBar({
             </Drawer.Title>
             <Drawer.CloseButton />
           </Drawer.Header>
+
           <Drawer.Body>
-            <NavLink label="Current workspace" leftSection={<IconDeviceDesktopBolt size="1rem" stroke={1.5} />} onClick={() => {}} hiddenFrom="sm" />
+            <NavLink
+              component={Link}
+              label="Current workspace"
+              leftSection={<IconDeviceDesktopBolt size="1rem" stroke={1.5} />}
+              onClick={() => close()}
+              hiddenFrom="sm"
+            />
             <Divider mt={10} mb={10} hiddenFrom="sm" />
-            <NavLink label="Your workspaces" leftSection={<IconDeviceDesktop size="1rem" stroke={1.5} />} onClick={() => {}} />
-            <NavLink label="Your instances" leftSection={<IconServer2 size="1rem" stroke={1.5} />} onClick={() => {}} />
+            <NavLink
+              component={Link}
+              to="/"
+              label="Your workspaces"
+              leftSection={<IconDeviceDesktop size="1rem" stroke={1.5} />}
+              onClick={() => close()}
+            />
+            <NavLink component={Link} to="/" label="Your instances" leftSection={<IconServer2 size="1rem" stroke={1.5} />} onClick={() => close()} />
             <Divider mt={10} mb={10} />
-            <NavLink label="Upgrade" leftSection={<IconUpload size="1rem" stroke={1.5} />} onClick={() => {}} />
-            <NavLink label="What's New" leftSection={<IconSpeakerphone size="1rem" stroke={1.5} />} onClick={() => {}} />
-            <NavLink label="Settings" leftSection={<IconSettings size="1rem" stroke={1.5} />} onClick={() => {}} />
+            <NavLink component={Link} to="/" label="Upgrade" leftSection={<IconUpload size="1rem" stroke={1.5} />} onClick={() => close()} />
+            <NavLink component={Link} to="/" label="What's New" leftSection={<IconSpeakerphone size="1rem" stroke={1.5} />} onClick={() => close()} />
+            <NavLink
+              component={Link}
+              to="/settings/preferences"
+              label="Settings"
+              leftSection={<IconSettings size="1rem" stroke={1.5} />}
+              onClick={() => close()}
+            />
             <Divider mt={10} mb={10} />
-            <NavLink label="Documentations" leftSection={<IconBook2 size="1rem" stroke={1.5} />} onClick={() => {}} />
-            <NavLink label="Support" leftSection={<IconUsers size="1rem" stroke={1.5} />} onClick={() => {}} />
+            <NavLink component={Link} to="/" label="Documentations" leftSection={<IconBook2 size="1rem" stroke={1.5} />} onClick={() => close()} />
+            <NavLink component={Link} to="/" label="Support" leftSection={<IconUsers size="1rem" stroke={1.5} />} onClick={() => close()} />
             <Divider mt={10} mb={10} />
             <NavLink
               active
@@ -78,7 +97,7 @@ export default function NavBar({
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>
-      <Modal opened={signOutModalOpened} onClose={closeSignOutModal} centered withCloseButton={false}>
+      <Modal opened={signOutModalOpened} onClose={closeSignOutModal} centered withCloseButton={false} padding="lg" radius="lg">
         <Box>
           <Title order={3} mb="xs">
             Sign out
