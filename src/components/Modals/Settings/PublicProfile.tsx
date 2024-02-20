@@ -190,7 +190,7 @@ export default function SettingsPublicProfileModal({ setUpdatePreferences }: { s
               <Flex mt="md" direction={"column"}>
                 <TextInput
                   label="Phone number"
-                  description="Change your phone number via Account"
+                  description="Set or change your phone number via Account"
                   variant="filled"
                   value={user.phoneNumber}
                   disabled

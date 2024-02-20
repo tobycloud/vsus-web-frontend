@@ -36,7 +36,7 @@ const SettingsPreferences = () => {
   const publicProfileModal = SettingsPublicProfileModal({ setUpdatePreferences });
 
   const avatarBox = (
-    <Flex direction={"column"} mt="md">
+    <Flex direction={"column"} mt="md" align="center">
       <Text c="dimmed">Avatar</Text>
       <Avatar src={avatar} size={150} radius="50%" mt="sm" />
     </Flex>
@@ -63,7 +63,9 @@ const SettingsPreferences = () => {
               </Flex>
               <Flex mt="md" direction={"column"}>
                 <Text c="dimmed">Display name</Text>
-                <Text fw={500}>{user.name}</Text>
+                <Text fw={500} c={user.name ? "white" : "dark"}>
+                  {user.name || "Not set"}
+                </Text>
               </Flex>
               <Flex mt="md" direction={"column"}>
                 <Text c="dimmed">Email</Text>
@@ -73,7 +75,9 @@ const SettingsPreferences = () => {
               </Flex>
               <Flex mt="md" direction={"column"}>
                 <Text c="dimmed">Phone number</Text>
-                <Text fw={500}>{user.phoneNumber}</Text>
+                <Text fw={500} c={user.phoneNumber ? "white" : "dark"}>
+                  {user.phoneNumber || "Not set"}
+                </Text>
               </Flex>
             </Flex>
             {!isMobile && avatarBox}
