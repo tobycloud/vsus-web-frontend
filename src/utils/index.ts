@@ -25,3 +25,15 @@ export function base64toFile(base64: string): File | null {
 
   return new File([blob], fileName, { type: contentType });
 }
+
+export const countryCodes = [
+  { code: "US", number: "1" },
+  { code: "CA", number: "1" },
+  { code: "VN", number: "84" },
+];
+
+export function formatPhoneNumber(phoneNumber: string): string {
+  if (phoneNumber.length === 3) return `${phoneNumber} `;
+  if (phoneNumber.length === 7) return `${phoneNumber.slice(0, 3)} ${phoneNumber.slice(4, 7)} `;
+  return phoneNumber;
+}

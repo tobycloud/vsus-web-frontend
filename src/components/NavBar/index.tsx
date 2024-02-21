@@ -59,6 +59,7 @@ export default function NavBar({
               leftSection={<IconDeviceDesktopBolt size="1rem" stroke={1.5} />}
               onClick={() => close()}
               hiddenFrom="sm"
+              disabled
             />
             <Divider mt={10} mb={10} hiddenFrom="sm" />
             <NavLink
@@ -67,11 +68,26 @@ export default function NavBar({
               label="Your workspaces"
               leftSection={<IconDeviceDesktop size="1rem" stroke={1.5} />}
               onClick={() => close()}
+              disabled
             />
-            <NavLink component={Link} to="/" label="Your instances" leftSection={<IconServer2 size="1rem" stroke={1.5} />} onClick={() => close()} />
+            <NavLink
+              component={Link}
+              to="/"
+              label="Your instances"
+              leftSection={<IconServer2 size="1rem" stroke={1.5} />}
+              onClick={() => close()}
+              disabled
+            />
             <Divider mt={10} mb={10} />
-            <NavLink component={Link} to="/" label="Upgrade" leftSection={<IconUpload size="1rem" stroke={1.5} />} onClick={() => close()} />
-            <NavLink component={Link} to="/" label="What's New" leftSection={<IconSpeakerphone size="1rem" stroke={1.5} />} onClick={() => close()} />
+            <NavLink component={Link} to="/" label="Upgrade" leftSection={<IconUpload size="1rem" stroke={1.5} />} onClick={() => close()} disabled />
+            <NavLink
+              component={Link}
+              to="/"
+              label="What's New"
+              leftSection={<IconSpeakerphone size="1rem" stroke={1.5} />}
+              onClick={() => close()}
+              disabled
+            />
             <NavLink
               component={Link}
               to="/settings/preferences"
@@ -80,8 +96,15 @@ export default function NavBar({
               onClick={() => close()}
             />
             <Divider mt={10} mb={10} />
-            <NavLink component={Link} to="/" label="Documentations" leftSection={<IconBook2 size="1rem" stroke={1.5} />} onClick={() => close()} />
-            <NavLink component={Link} to="/" label="Support" leftSection={<IconUsers size="1rem" stroke={1.5} />} onClick={() => close()} />
+            <NavLink
+              component={Link}
+              to="/"
+              label="Documentations"
+              leftSection={<IconBook2 size="1rem" stroke={1.5} />}
+              onClick={() => close()}
+              disabled
+            />
+            <NavLink component={Link} to="/" label="Support" leftSection={<IconUsers size="1rem" stroke={1.5} />} onClick={() => close()} disabled />
             <Divider mt={10} mb={10} />
             <NavLink
               active

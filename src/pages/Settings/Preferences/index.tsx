@@ -2,7 +2,7 @@ import { Alert, Avatar, Box, Button, Center, Flex, NativeSelect, Text, Title } f
 import { useMediaQuery } from "@mantine/hooks";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
-import SettingsPublicProfileModal from "../../../components/Modals/Settings/PublicProfile";
+import { Link } from "react-router-dom";
 import SettingsBox from "../../../components/SettingsBox";
 import pocketbase, { getAvatar } from "../../../database";
 import { User } from "../../../database/models";
@@ -31,9 +31,7 @@ const SettingsPreferences = () => {
     setDocumentTitle("Preferences | Settings");
   }, []);
 
-  const [updatePreferences, setUpdatePreferences] = useState(false);
-
-  const publicProfileModal = SettingsPublicProfileModal({ setUpdatePreferences });
+  const preferencesUpdated = new URLSearchParams(window.location.search).get("updated");
 
   const avatarBox = (
     <Flex direction={"column"} mt="md" align="center">
@@ -44,9 +42,8 @@ const SettingsPreferences = () => {
 
   return (
     <Box>
-      {publicProfileModal.element}
       <Title order={2}>Preferences</Title>
-      {updatePreferences && (
+      {preferencesUpdated && (
         <Alert variant="light" mt="md" color="green" title="Success!" icon={<IconInfoCircle />}>
           Your preferences have been updated successfully.
         </Alert>
@@ -85,15 +82,7 @@ const SettingsPreferences = () => {
         }
         rightSection={
           <Center>
-            <Button
-              variant="light"
-              fw={400}
-              color="vsus-button"
-              style={{ margin: "auto" }}
-              onClick={() => {
-                publicProfileModal.open();
-              }}
-            >
+            <Button variant="light" fw={400} color="vsus-button" style={{ margin: "auto" }} component={Link} to="edit-profile">
               Edit Profile
             </Button>
           </Center>

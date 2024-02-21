@@ -9,7 +9,15 @@ import ResetPassword from "./pages/Auth/ForgotPassword/ResetPassword";
 import SignIn from "./pages/Auth/SignIn";
 import SignUp from "./pages/Auth/SignUp";
 import Home from "./pages/Home";
+import SettingsAccount from "./pages/Settings/Account";
+import SettingsAccount2FA from "./pages/Settings/Account/2FA";
+import { SettingsAccountDeleteAccount } from "./pages/Settings/Account/DeleteAccount";
+import SettingsAccountChangeEmail from "./pages/Settings/Account/Email";
+import SettingsAccountPhoneNumber from "./pages/Settings/Account/PhoneNumber/Changing";
+import SettingsAccountPhoneNumberConfirmation from "./pages/Settings/Account/PhoneNumber/Confirmation";
+import SettingsAccountPhoneNumberVerification from "./pages/Settings/Account/PhoneNumber/Verification";
 import SettingsPreferences from "./pages/Settings/Preferences";
+import SettingsPreferencesEditProfile from "./pages/Settings/Preferences/EditProfile";
 
 const routes: RouteObject[] = [
   {
@@ -23,6 +31,38 @@ const routes: RouteObject[] = [
       {
         path: "/settings/preferences",
         element: <SettingsPreferences />,
+      },
+      {
+        path: "/settings/preferences/edit-profile",
+        element: <SettingsPreferencesEditProfile />,
+      },
+      {
+        path: "/settings/account",
+        element: <SettingsAccount />,
+      },
+      {
+        path: "/settings/account/change-phone-number",
+        element: <SettingsAccountPhoneNumber />,
+      },
+      {
+        path: "/settings/account/change-phone-number/confirmation",
+        element: <SettingsAccountPhoneNumberConfirmation />,
+      },
+      {
+        path: "/settings/account/change-phone-number/verification",
+        element: <SettingsAccountPhoneNumberVerification />,
+      },
+      {
+        path: "/settings/account/change-email-address",
+        element: <SettingsAccountChangeEmail />,
+      },
+      {
+        path: "/settings/account/two-factor-authentication",
+        element: <SettingsAccount2FA />,
+      },
+      {
+        path: "/settings/account/delete-account",
+        element: <SettingsAccountDeleteAccount />,
       },
     ],
   },
@@ -61,7 +101,7 @@ export default function App() {
       defaultColorScheme="dark"
       theme={{
         colors: {
-          dark: ["#ffffff", "#e6e7e7", "#b3b8b8", "#99a0a0", "#808889", "#1a3e42", "#1a3e42", "#00292d", "#1a292a", "#001112"],
+          dark: ["#ffffff", "#e6e7e7", "#b3b8b8", "#99a0a0", "#4c5d61", "#1a3e42", "#1a3e42", "#00292d", "#1a292a", "#001112"],
           primary: ["#ffffff", "#e6eaea", "#b3bfc0", "#99a9ab", "#809496", "#667f81", "#4d696c", "#335457", "#1a3e42", "#00292d"],
           "vsus-natural": ["#E6FEFF", "#E6FEFF", "#E6FEFF", "#00A9BD", "#00A9BD", "#00A9BD", "#00292D", "#00292D", "#00292D", "#00292D"],
           "vsus-button": ["#f0f9fa", "#e3f0f1", "#c0e2e3", "#9bd3d5", "#7dc5c8", "#6abdc1", "#5fbabe", "#4ea3a7", "#419195", "#2c7e82"],

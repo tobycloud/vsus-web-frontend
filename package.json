@@ -14,6 +14,7 @@
     "@mantine/form": "7.5.3",
     "@mantine/spotlight": "7.5.3",
     "preact": "^10.19.3",
+    "react-country-flag": "^3.1.0",
     "react-router-dom": "^6.21.3",
     "use-file-picker": "^2.1.1"
   },
