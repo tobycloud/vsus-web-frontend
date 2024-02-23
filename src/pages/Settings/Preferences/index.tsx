@@ -34,7 +34,7 @@ const SettingsPreferences = () => {
   const preferencesUpdated = new URLSearchParams(window.location.search).get("updated");
 
   const avatarBox = (
-    <Flex direction={"column"} mt="md" align="center">
+    <Flex direction={"column"} mt="md" align={!isMobile ? "center" : "flex-start"}>
       <Text c="dimmed">Avatar</Text>
       <Avatar src={avatar} size={150} radius="50%" mt="sm" />
     </Flex>
@@ -83,7 +83,7 @@ const SettingsPreferences = () => {
         rightSection={
           <Center>
             <Button variant="light" fw={400} color="vsus-button" style={{ margin: "auto" }} component={Link} to="edit-profile">
-              Edit Profile
+              Edit profile
             </Button>
           </Center>
         }

@@ -1,5 +1,5 @@
 import { Divider, NavLink } from "@mantine/core";
-import { IconBook2, IconChevronLeft, IconToggleRight, IconUser, IconUsers } from "@tabler/icons-react";
+import { IconCarouselHorizontal, IconChevronLeft, IconCreditCard, IconFileInvoice, IconToggleRight, IconUser } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
 import { Link } from "react-router-dom";
 
@@ -31,9 +31,9 @@ const SettingsNavBar = () => {
         active={page.includes("/settings/account")}
       />
       <Divider mt={10} mb={10} label="Billing Settings" />
-      <NavLink label="Billing" leftSection={<IconBook2 size="1rem" stroke={1.5} />} href="/" disabled />
-      <NavLink label="Manage Plans" leftSection={<IconUsers size="1rem" stroke={1.5} />} href="/" disabled />
-      <NavLink label="Payment Information" leftSection={<IconBook2 size="1rem" stroke={1.5} />} href="/" disabled />
+      <NavLink label="Billing" leftSection={<IconFileInvoice size="1rem" stroke={1.5} />} href="/" disabled />
+      <NavLink label="Manage Plans" leftSection={<IconCarouselHorizontal size="1rem" stroke={1.5} />} href="/" disabled />
+      <NavLink label="Payment Information" leftSection={<IconCreditCard size="1rem" stroke={1.5} />} href="/" disabled />
     </>
   );
 };

@@ -52,17 +52,17 @@ const SettingsPreferencesEditProfile = () => {
     multiple: true,
     validators: [
       new FileAmountLimitValidator({ max: 1 }),
-      new FileTypeValidator(["jpg", "png", "gif", "webp"]),
+      new FileTypeValidator(["jpg", "jpeg", "png", "gif", "webp"]), // two jpg on purpose
       new FileSizeValidator({ maxFileSize: 8 * 1024 ** 2 /* 8 MB */ }),
     ],
   });
 
   useEffect(() => {
-    if (filesContent.length > 0) setAvatar(filesContent[0].content);
+    filesContent.length > 0 && setAvatar(filesContent[0].content);
   }, [filesContent]);
 
   useEffect(() => {
-    avatarErrors.length > 0 && setErrorWhileUpdating("Image should be less than 8MB and in one of the following formats: jpg, png, gif, webp");
+    setErrorWhileUpdating(avatarErrors.length > 0 ? "Image should be less than 8MB and in one of the following formats: jpg, png, gif, webp" : "");
   }, [avatarErrors]);
 
   const [dirtyForm, setDirtyForm] = useState(false);
@@ -76,6 +76,8 @@ const SettingsPreferencesEditProfile = () => {
     filesContent.length = 0;
     avatarErrors.length = 0;
   };
+
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const avatarBox = (
     <Flex direction={"column"} align="center" ml="lg">
@@ -114,7 +116,7 @@ const SettingsPreferencesEditProfile = () => {
   return (
     <Container>
       <BackButton to="/settings/preferences" />
-      <Title order={2}>Edit Profile</Title>
+      <Title order={2}>Edit profile</Title>
       {!!errorWhileUpdating && (
         <Alert variant="light" color="red" title="Error" icon={<IconInfoCircle />} mb="md" mt="md">
           {errorWhileUpdating}
@@ -125,6 +127,7 @@ const SettingsPreferencesEditProfile = () => {
         component="form"
         onSubmit={form.onSubmit(async () => {
           try {
+            setButtonLoading(true);
             const data: {
               username: string;
               name: string;
@@ -138,6 +141,7 @@ const SettingsPreferencesEditProfile = () => {
             await pocketbase.collection("users").authRefresh();
             navigate("/settings/preferences?updated=true");
           } catch (error) {
+            setButtonLoading(false);
             setErrorWhileUpdating((error as Error).message);
           }
         })}
@@ -182,12 +186,12 @@ const SettingsPreferencesEditProfile = () => {
                 resetForm();
                 getUserAvatar();
               }}
-              disabled={avatarLoading}
+              disabled={avatarLoading || buttonLoading}
             >
               Discard changes
             </Button>
           )}
-          <Button variant="light" color="green" type="submit" disabled={!dirtyForm}>
+          <Button variant="light" color="green" type="submit" disabled={!dirtyForm} loading={buttonLoading}>
             Save
           </Button>
         </Group>

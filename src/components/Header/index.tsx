@@ -82,5 +82,3 @@ export function Header() {
     </>
   );
 }
-
-Header.defaultProps = { inSettings: false };

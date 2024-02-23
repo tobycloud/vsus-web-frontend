@@ -1,6 +1,7 @@
-import { Avatar, Box, Button, Container, Divider, Flex, Group, Image, Text, Title, UnstyledButton } from "@mantine/core";
-import { IconAdjustments, IconMoodSmile } from "@tabler/icons-react";
+import { Avatar, Box, Button, Container, Divider, Flex, Group, Menu, Text, Title, UnstyledButton, rem } from "@mantine/core";
+import { IconAdjustments, IconDots, IconMessageExclamation, IconMessageOff, IconMoodSmile, IconUserMinus } from "@tabler/icons-react";
 import { useEffect } from "preact/hooks";
+import { Link } from "react-router-dom";
 import { setDocumentTitle } from "../../utils";
 
 export default function Home() {
@@ -8,25 +9,63 @@ export default function Home() {
     setDocumentTitle("Home");
   }, []);
 
+  const tobyPostReactions = {
+    "😭": 26,
+    "😂": 5,
+    "🤯": 3,
+  };
+
+  // Things to note:
+  // - Eggu is not sure if multiple reactions is a good idea, and how to implement it in PB
+  // - Eggu wants these posts to be the same as those on GitHub, not those on X => Displaying activities instead of self-posted posts
+  // - Eggu wants to display the activities in a timeline (that is, chronological order)
+
   return (
     <Container>
       <Flex justify="space-between">
         <Title order={2}>Home</Title>
-        <Button variant="outline" color="primary" radius="lg" leftSection={<IconAdjustments />}>
+        <Button variant="light" color="primary" radius="md" leftSection={<IconAdjustments size={20} />} fw={500}>
           Filter
         </Button>
       </Flex>
       <Divider my="lg" />
       <Box p="lg" bg="dark" style={{ borderRadius: "var(--mantine-radius-lg)" }} mb="lg">
-        <Group>
-          <Avatar src="https://avatars.githubusercontent.com/u/62174797" alt="Toby Cm" radius="xl" />
-          <Box>
-            <Text size="sm">Toby Cm</Text>
-            <Text size="xs" c="dimmed">
-              10 minutes ago
-            </Text>
-          </Box>
-        </Group>
+        <Flex justify="space-between" align="center">
+          <Group gap="sm">
+            <Avatar
+              src="https://avatars.githubusercontent.com/u/62174797"
+              alt="Toby Cm"
+              radius="xl"
+              component={Link}
+              to="https://github.com/tobycm"
+            />
+            <Box>
+              <Text c="dimmed" size="sm">
+                <Text c="white" span size="sm" component={Link} to="https://github.com/tobycm">
+                  Toby Cm{" "}
+                </Text>
+                announced a sophisticated statement regarding one of his greatest computer innovations
+              </Text>
+              <Text size="xs" c="dimmed">
+                10 minutes ago
+              </Text>
+            </Box>
+          </Group>
+          <Menu shadow="md">
+            <Menu.Target>
+              <UnstyledButton>
+                <IconDots size={20} />
+              </UnstyledButton>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item leftSection={<IconMessageOff style={{ width: rem(14), height: rem(14) }} />}>Show less activities from Toby Cm</Menu.Item>
+              <Menu.Item leftSection={<IconUserMinus style={{ width: rem(14), height: rem(14) }} />}>Unfollow Toby Cm</Menu.Item>
+              <Menu.Item color="red" leftSection={<IconMessageExclamation style={{ width: rem(14), height: rem(14) }} />}>
+                Report
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Flex>
         <Text mt="lg">no vsus until 2025 🤯</Text>
         <video
           src="/videos/vsus.mp4"
@@ -39,41 +78,14 @@ export default function Home() {
               <IconMoodSmile />
             </Avatar>
           </UnstyledButton>
-          <Button variant="outline" radius="xl">
-            😭 26
-          </Button>
-          <Button variant="outline" radius="xl">
-            😂 5
-          </Button>
-          <Button variant="outline" radius="xl">
-            🤯 3
-          </Button>
-        </Group>
-      </Box>
-      <Box p="lg" bg="dark" style={{ borderRadius: "var(--mantine-radius-lg)" }} mb="lg">
-        <Group>
-          <Avatar src="https://avatars.githubusercontent.com/u/78996937" alt="pdt1806" radius="xl" />
-          <Box>
-            <Text size="sm">pdt1806</Text>
-            <Text size="xs" c="dimmed">
-              12 minutes ago
-            </Text>
-          </Box>
-        </Group>
-        <Text mt="lg">the posts here are hardcoded btw, but u guys got the idea</Text>
-        <Image src="https://media1.tenor.com/m/NSqnTvyDe8wAAAAC/frieren-mimic.gif" w="100%" radius="md" mt="lg" />
-        <Group mt="md" gap="xs">
-          <UnstyledButton>
-            <Avatar radius="xl">
-              <IconMoodSmile />
-            </Avatar>
-          </UnstyledButton>
-          <Button variant="outline" radius="xl">
-            😮 10
-          </Button>
-          <Button variant="outline" radius="xl">
-            😂 9
-          </Button>
+          {Object.entries(tobyPostReactions).map(([emoji, count]) => (
+            <Button key={emoji} variant="light" radius="xl" size="compact-lg" fw={400}>
+              <Group gap="xs">
+                <Text size="sm">{emoji}</Text>
+                <Text size="sm">{count}</Text>
+              </Group>
+            </Button>
+          ))}
         </Group>
       </Box>
     </Container>
