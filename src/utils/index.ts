@@ -37,3 +37,5 @@ export function formatPhoneNumber(phoneNumber: string): string {
   if (phoneNumber.length === 7) return `${phoneNumber.slice(0, 3)} ${phoneNumber.slice(4, 7)} `;
   return phoneNumber;
 }
+
+export const borderLine = "calc(0.0625rem * var(--mantine-scale)) solid var(--app-shell-border-color)";

@@ -1,5 +1,6 @@
 import { Box, Divider, Table, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { borderLine } from "../../utils";
 
 const SettingsBox = ({ title, leftSection, rightSection }: { title: string; leftSection: React.ReactNode; rightSection: React.ReactNode }) => {
   const isMobile = useMediaQuery(`(max-width: 62em)`);
@@ -45,7 +46,7 @@ const SettingsBox = ({ title, leftSection, rightSection }: { title: string; left
             style={{
               borderBottomRightRadius: "20px",
               borderTopRightRadius: "20px",
-              borderLeft: "calc(0.0625rem*var(--mantine-scale)) solid var(--_app-shell-border-color)",
+              borderLeft: borderLine,
             }}
           >
             {rightSection}

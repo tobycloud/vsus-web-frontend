@@ -6,6 +6,7 @@ import { useEffect, useState } from "preact/hooks";
 import { Link } from "react-router-dom";
 import pocketbase, { getAvatar } from "../../database";
 import { User } from "../../database/models";
+import { borderLine } from "../../utils";
 import NavBar from "../NavBar";
 import SearchMenu from "../SearchMenu";
 import WorkspacesCombobox from "../WorkspacesCombobox";
@@ -32,7 +33,7 @@ export function Header() {
 
   return (
     <>
-      <header className={classes.header} style={{ borderBottom: "calc(0.0625rem*var(--mantine-scale)) solid var(--_app-shell-border-color)" }}>
+      <header className={classes.header} style={{ borderBottom: borderLine }}>
         <Flex justify="space-between" h="100%">
           <Group flex={!isMobile ? 1.5 : "none"}>
             <Group gap={0} component={Link} to="/" style={{ color: "white", textDecoration: "none" }} w={92.75}>
