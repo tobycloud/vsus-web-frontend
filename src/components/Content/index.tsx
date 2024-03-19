@@ -14,13 +14,6 @@ export default function Content() {
     if (pocketbase.authStore.model === null) navigate("/auth/signin");
   });
 
-  useEffect(() => {
-    const authRefresh = async () => {
-      await pocketbase.collection("users").authRefresh();
-    };
-    if (pocketbase.authStore.model) authRefresh();
-  }, []);
-
   const inSettings = window.location.pathname.includes("/settings");
 
   const [opened] = useDisclosure();

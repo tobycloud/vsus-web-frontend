@@ -26,8 +26,8 @@ export async function userSignUp(data: Object) {
   await pocketbase.collection("users").create(data);
 }
 
-export async function getAvatar(user: User) {
-  return await pocketbase.getFileUrl(user, user.avatar);
+export function getAvatar(user: User) {
+  return pocketbase.getFileUrl(user, user.avatar);
 }
 
 export async function getWorkspaces(user: User) {

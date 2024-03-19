@@ -3,11 +3,11 @@ import { useForm } from "@mantine/form";
 import { IconAt, IconKey } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
 import { Link, useNavigate } from "react-router-dom";
-import pocketbase, { userSignIn } from "../../../database";
-import SocialButton from "./SocialButton";
-import classes from "../index.module.css";
-import AuthLayout from "../Layout";
+import { userSignIn } from "../../../database";
 import { setDocumentTitle } from "../../../utils";
+import AuthLayout from "../Layout";
+import classes from "../index.module.css";
+import SocialButton from "./SocialButton";
 
 export default function SignIn() {
   const form = useForm({
@@ -22,10 +22,6 @@ export default function SignIn() {
   const [errorDuringSignIn, setErrorDuringSignIn] = useState("");
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (pocketbase.authStore.isValid) navigate("/");
-  });
 
   useEffect(() => {
     setDocumentTitle("Sign in");

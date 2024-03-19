@@ -18,13 +18,8 @@ const SettingsPreferences = () => {
   const [avatar, setAvatar] = useState<string | null>(null);
 
   useEffect(() => {
-    const getUserAvatar = async () => {
-      if (!user) return;
-      const url = await getAvatar(user);
-      setAvatar(url);
-    };
-
-    getUserAvatar();
+    if (!user) return;
+    setAvatar(getAvatar(user));
   }, [user]);
 
   useEffect(() => {

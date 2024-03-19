@@ -6,8 +6,12 @@ export default function AuthContent() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (pocketbase.authStore.model !== null) navigate("/");
-  });
+    pocketbase
+      .collection("users")
+      .authRefresh()
+      .then(() => navigate("/"))
+      .catch(() => {});
+  }); // dunno if this is healthy for pocketbase
 
   return <Outlet />;
 }

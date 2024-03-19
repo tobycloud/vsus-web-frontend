@@ -3,7 +3,7 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { spotlight } from "@mantine/spotlight";
 import { IconInbox, IconPlus, IconSearch } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import pocketbase, { getAvatar } from "../../database";
 import { User } from "../../database/models";
 import { borderLine } from "../../utils";
@@ -15,6 +15,8 @@ import classes from "./index.module.css";
 export function Header() {
   const isMobile = useMediaQuery("(max-width: 62em)");
 
+  const navigate = useNavigate();
+
   const user = pocketbase.authStore.model as User;
 
   const [opened, { open, close }] = useDisclosure(false);
@@ -22,13 +24,21 @@ export function Header() {
   const [avatar, setAvatar] = useState<string | null>(null);
 
   useEffect(() => {
-    const getUserAvatar = async () => {
-      if (!user) return;
-      const url = await getAvatar(user);
-      setAvatar(url);
-    };
+    if (window.location.pathname === "/auth/signin") return;
+    console.log(window.location.pathname);
 
-    getUserAvatar();
+    pocketbase
+      .collection("users")
+      .authRefresh()
+      .catch(() => {
+        // not logged in
+        navigate("/auth/signin");
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    setAvatar(getAvatar(user));
   }, [user]);
 
   return (

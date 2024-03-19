@@ -31,14 +31,10 @@ const SettingsPreferencesEditProfile = () => {
 
   const [avatar, setAvatar] = useState<string | null>(null);
 
-  const getUserAvatar = async () => {
-    if (!user) return;
-    const url = await getAvatar(user);
-    setAvatar(url);
-  };
-
   useEffect(() => {
-    getUserAvatar();
+    if (!user) return;
+
+    setAvatar(getAvatar(user));
   }, []);
 
   const {
@@ -184,7 +180,9 @@ const SettingsPreferencesEditProfile = () => {
               color="cyan"
               onClick={() => {
                 resetForm();
-                getUserAvatar();
+
+                if (!user) return;
+                setAvatar(getAvatar(user));
               }}
               disabled={avatarLoading || buttonLoading}
             >
