@@ -14,7 +14,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import pocketbase from "../../database";
 
-export default function NavBar({
+export default function RightNavBar({
   opened,
   close,
   username,

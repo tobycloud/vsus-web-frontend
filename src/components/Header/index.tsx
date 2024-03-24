@@ -1,15 +1,17 @@
-import { ActionIcon, Avatar, Box, Code, Flex, Group, Image, Indicator, Text, Title, Tooltip, UnstyledButton, rem } from "@mantine/core";
+import { ActionIcon, Avatar, Box, Code, Flex, Group, Indicator, Text, Tooltip, UnstyledButton, rem } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { spotlight } from "@mantine/spotlight";
-import { IconInbox, IconPlus, IconSearch } from "@tabler/icons-react";
+import { IconInbox, IconMenu2, IconSearch } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
 import { Link, useNavigate } from "react-router-dom";
 import pocketbase, { getAvatar } from "../../database";
 import { User } from "../../database/models";
 import { borderLine } from "../../utils";
-import NavBar from "../NavBar";
+import CreateWorkspaceModal from "../CreateWorkspaceModal";
+import LeftNavBar from "../LeftNavBar";
+import Logo from "../Logo";
+import RightNavBar from "../RightNavBar";
 import SearchMenu from "../SearchMenu";
-import WorkspacesCombobox from "../WorkspacesCombobox";
 import classes from "./index.module.css";
 
 export function Header() {
@@ -19,9 +21,13 @@ export function Header() {
 
   const user = pocketbase.authStore.model as User;
 
-  const [opened, { open, close }] = useDisclosure(false);
+  const [openedRight, { open: openRight, close: closeRight }] = useDisclosure(false);
+
+  const [openedLeft, { open: openLeft, close: closeLeft }] = useDisclosure(false);
 
   const [avatar, setAvatar] = useState<string | null>(null);
+
+  const createWorkspace = CreateWorkspaceModal();
 
   useEffect(() => {
     if (window.location.pathname === "/auth/signin") return;
@@ -43,23 +49,24 @@ export function Header() {
 
   return (
     <>
+      {createWorkspace.element}
       <header className={classes.header} style={{ borderBottom: borderLine }}>
         <Flex justify="space-between" h="100%">
           <Group flex={!isMobile ? 1.5 : "none"}>
-            <Group gap={0} component={Link} to="/" style={{ color: "white", textDecoration: "none" }} w={92.75}>
-              <Image src="/../images/icons/vsus.svg" alt="vSuS" h={35} style={{ pointerEvents: "none", userSelect: "none" }} />
-              <Title order={3} ml="xs" style={{ pointerEvents: "none", userSelect: "none" }}>
-                vSuS
-              </Title>
-            </Group>
-            <Group gap={0} visibleFrom="sm">
+            <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg" onClick={openLeft}>
+              <IconMenu2 size={20} />
+            </ActionIcon>
+            <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+              <Logo />
+            </Link>
+            {/* <Group gap={0} visibleFrom="sm">
               <WorkspacesCombobox user={user} />
               <Tooltip label="Create a new workspace" color="primary" openDelay={250}>
-                <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg" ml="xs">
+                <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg" ml="xs" onClick={createWorkspace.open}>
                   <IconPlus size={20} />
                 </ActionIcon>
               </Tooltip>
-            </Group>
+            </Group> */}
           </Group>
           <Group visibleFrom="lg" flex={!isMobile ? 1 : "none"}>
             <UnstyledButton variant="light" color="vsus-button" onClick={spotlight.open} mr="auto" ml="auto">
@@ -84,12 +91,13 @@ export function Header() {
                 </ActionIcon>
               </Tooltip>
             </Indicator>
-            <Avatar src={avatar} onClick={open} />
+            <Avatar src={avatar} onClick={openRight} />
           </Group>
         </Flex>
       </header>
       <SearchMenu />
-      <NavBar opened={opened} close={close} username={user?.username} name={user?.name} avatar={avatar} />
+      <LeftNavBar opened={openedLeft} close={closeLeft} user={user} />
+      <RightNavBar opened={openedRight} close={closeRight} username={user?.username} name={user?.name} avatar={avatar} />
     </>
   );
 }

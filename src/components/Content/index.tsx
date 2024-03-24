@@ -16,6 +16,8 @@ export default function Content() {
 
   const inSettings = window.location.pathname.includes("/settings");
 
+  const inWorkspace = window.location.pathname.includes("/workspace");
+
   const [opened] = useDisclosure();
 
   return (
@@ -38,7 +40,7 @@ export default function Content() {
       </AppShell.Navbar>
 
       <AppShell.Main>
-        <Container mt="xl" pb="xl">
+        <Container mt="xl" pb="xl" size={inWorkspace ? "xl" : "md"}>
           {isMobile && inSettings && (
             <Box>
               <SettingsNavBar />

@@ -1,6 +1,9 @@
 import { MantineProvider } from "@mantine/core";
 import { RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./app.css";
+
+import { getWorkspace } from "./database";
+
 import Content from "./components/Content";
 import AuthContent from "./components/Content/Auth";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
@@ -18,6 +21,7 @@ import SettingsAccountPhoneNumberConfirmation from "./pages/Settings/Account/Pho
 import SettingsAccountPhoneNumberVerification from "./pages/Settings/Account/PhoneNumber/Verification";
 import SettingsPreferences from "./pages/Settings/Preferences";
 import SettingsPreferencesEditProfile from "./pages/Settings/Preferences/EditProfile";
+import WorkspaceHome from "./pages/Workspace/Home";
 
 const routes: RouteObject[] = [
   {
@@ -64,6 +68,26 @@ const routes: RouteObject[] = [
         path: "/settings/account/delete-account",
         element: <SettingsAccountDeleteAccount />,
       },
+      {
+        path: "/workspace/",
+        element: <WorkspaceHome />,
+      },
+      {
+        path: "/workspace/:workspaceId",
+        element: <WorkspaceHome />,
+        loader: async ({ params }) => {
+          const { workspaceId } = params;
+          // Load workspace data
+
+          if (!workspaceId) return { workspace: null };
+
+          try {
+            return { workspace: await getWorkspace(workspaceId) };
+          } catch (error) {
+            return { workspace: null };
+          }
+        },
+      },
     ],
   },
   {
@@ -108,9 +132,9 @@ export default function App() {
           "vsus-text": ["#ebfeff", "#d8fbfd", "#aaf8fc", "#7df5fb", "#62f2fb", "#56f1fb", "#4ef1fb", "#40d6e0", "#2fbfc7", "#00a5ad"],
         },
         primaryColor: "primary",
-        fontFamily: "Readex Pro, sans-serif",
+        fontFamily: "Inter, sans-serif",
         headings: {
-          fontFamily: "Readex Pro, sans-serif",
+          fontFamily: "Inter, sans-serif",
         },
       }}
     >

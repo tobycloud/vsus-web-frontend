@@ -30,10 +30,14 @@ export function getAvatar(user: User) {
   return pocketbase.getFileUrl(user, user.avatar);
 }
 
-export async function getWorkspaces(user: User) {
+export async function getUserWorkspaces(user: User) {
   return await pocketbase.collection("workspaces").getFullList({
     filter: `owner = "${user.id}"`,
   });
+}
+
+export async function getWorkspace(id: string) {
+  return await pocketbase.collection("workspaces").getOne(id);
 }
 
 export async function getLimitWorkspaces(user: User, min: number, max: number) {

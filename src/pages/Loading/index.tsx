@@ -15,7 +15,7 @@ export default function Loading() {
   return (
     <Center h="calc(100vh - 60px)">
       <Flex direction="column" align="center">
-        <Loader size="xl" color="vsus-button" />
+        <Loader size="xl" color="white" />
         {seconds > 10 && (
           <>
             <Text align="center" mt="xl">

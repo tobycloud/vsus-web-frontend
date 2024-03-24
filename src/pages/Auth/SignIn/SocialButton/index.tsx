@@ -20,7 +20,7 @@ export default function SocialButton({ name, setErrorDuringSignIn }: { name: str
         }
       }}
     >
-      <Image src={`/images/icons/socials/${name.toLowerCase()}.svg`} alt={name} p="xs" style={{ pointerEvents: "none" }} />
+      <Image src={`/images/icons/socials/${name.toLowerCase()}.svg`} alt={name} p="xs" h={54} w={54} style={{ pointerEvents: "none" }} />
     </Avatar>
   );
 }
