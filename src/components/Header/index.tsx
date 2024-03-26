@@ -1,7 +1,7 @@
-import { ActionIcon, Avatar, Box, Code, Flex, Group, Indicator, Text, Tooltip, UnstyledButton, rem } from "@mantine/core";
+import { ActionIcon, Avatar, Box, Button, Code, Flex, Group, Indicator, Menu, Text, Tooltip, UnstyledButton, rem } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { spotlight } from "@mantine/spotlight";
-import { IconInbox, IconMenu2, IconSearch } from "@tabler/icons-react";
+import { IconChevronDown, IconDeviceDesktopAnalytics, IconInbox, IconMenu2, IconPlus, IconSearch, IconServer2 } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
 import { Link, useNavigate } from "react-router-dom";
 import pocketbase, { getAvatar } from "../../database";
@@ -15,11 +15,12 @@ import SearchMenu from "../SearchMenu";
 import classes from "./index.module.css";
 
 export function Header() {
+  const user = pocketbase.authStore.model as User;
+  if (!user) return null;
+
   const isMobile = useMediaQuery("(max-width: 62em)");
 
   const navigate = useNavigate();
-
-  const user = pocketbase.authStore.model as User;
 
   const [openedRight, { open: openRight, close: closeRight }] = useDisclosure(false);
 
@@ -27,11 +28,10 @@ export function Header() {
 
   const [avatar, setAvatar] = useState<string | null>(null);
 
-  const createWorkspace = CreateWorkspaceModal();
+  const createWorkspace = CreateWorkspaceModal({ user });
 
   useEffect(() => {
     if (window.location.pathname === "/auth/signin") return;
-    console.log(window.location.pathname);
 
     pocketbase
       .collection("users")
@@ -59,14 +59,6 @@ export function Header() {
             <Link to="/" style={{ color: "white", textDecoration: "none" }}>
               <Logo />
             </Link>
-            {/* <Group gap={0} visibleFrom="sm">
-              <WorkspacesCombobox user={user} />
-              <Tooltip label="Create a new workspace" color="primary" openDelay={250}>
-                <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg" ml="xs" onClick={createWorkspace.open}>
-                  <IconPlus size={20} />
-                </ActionIcon>
-              </Tooltip>
-            </Group> */}
           </Group>
           <Group visibleFrom="lg" flex={!isMobile ? 1 : "none"}>
             <UnstyledButton variant="light" color="vsus-button" onClick={spotlight.open} mr="auto" ml="auto">
@@ -84,6 +76,19 @@ export function Header() {
             <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg" hiddenFrom="lg" onClick={spotlight.open}>
               <IconSearch size={20} />
             </ActionIcon>
+            <Menu shadow="md" width={200}>
+              <Menu.Target>
+                <Button variant="light" color="vsus-button" rightSection={<IconChevronDown size={20} />} p="xs">
+                  <IconPlus size={20} />
+                </Button>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item leftSection={<IconDeviceDesktopAnalytics style={{ width: rem(14), height: rem(14) }} />} onClick={createWorkspace.open}>
+                  New workspace
+                </Menu.Item>
+                <Menu.Item leftSection={<IconServer2 style={{ width: rem(14), height: rem(14) }} />}>New instance</Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
             <Indicator color="red" size={15} withBorder disabled>
               <Tooltip label="You have no unread notifications" color="primary" openDelay={250}>
                 <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg">

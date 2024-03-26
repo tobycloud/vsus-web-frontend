@@ -11,6 +11,7 @@ import { countryCodes, formatPhoneNumber } from "../../../../utils";
 
 const SettingsAccountPhoneNumber = () => {
   const navigate = useNavigate();
+
   const user = pocketbase.authStore.model as User;
 
   const form = useForm({

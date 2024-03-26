@@ -1,9 +1,9 @@
 import { Alert, Box, Button, Divider, Group, Input, PasswordInput, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconAt, IconKey } from "@tabler/icons-react";
+import { IconAt, IconInfoCircle, IconKey } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
 import { Link, useNavigate } from "react-router-dom";
-import { userSignIn } from "../../../database";
+import pocketbase, { userSignIn } from "../../../database";
 import { setDocumentTitle } from "../../../utils";
 import AuthLayout from "../Layout";
 import classes from "../index.module.css";
@@ -35,7 +35,7 @@ export default function SignIn() {
         </Alert>
       )}
       {!!errorDuringSignIn && (
-        <Alert variant="light" color="red" title="Error!" mt="xl">
+        <Alert variant="light" color="red" title="Error!" mt="xl" icon={<IconInfoCircle />}>
           {errorDuringSignIn}
         </Alert>
       )}
@@ -45,6 +45,7 @@ export default function SignIn() {
         onSubmit={form.onSubmit(async () => {
           try {
             await userSignIn(form.values.email, form.values.password);
+            pocketbase.collection("users").authRefresh();
             navigate("/");
           } catch (error) {
             form.reset();

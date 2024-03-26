@@ -1,6 +1,6 @@
 import { rem } from "@mantine/core";
 import { Spotlight, SpotlightActionData } from "@mantine/spotlight";
-import { IconDashboard, IconDeviceDesktop, IconSearch, IconServer2 } from "@tabler/icons-react";
+import { IconDashboard, IconDeviceDesktopAnalytics, IconSearch, IconServer2 } from "@tabler/icons-react";
 
 const actions: SpotlightActionData[] = [
   {
@@ -15,7 +15,7 @@ const actions: SpotlightActionData[] = [
     label: "Workspaces",
     description: "Control virtual machine workspaces efficiently.",
     onClick: () => {},
-    leftSection: <IconDeviceDesktop style={{ width: rem(24), height: rem(24) }} stroke={1.5} />,
+    leftSection: <IconDeviceDesktopAnalytics style={{ width: rem(24), height: rem(24) }} stroke={1.5} />,
   },
   {
     id: "Instances",

@@ -2,8 +2,7 @@ import { Avatar, Box, Button, Divider, Drawer, Flex, Group, Modal, NavLink, Text
 import { useDisclosure } from "@mantine/hooks";
 import {
   IconBook2,
-  IconDeviceDesktop,
-  IconDeviceDesktopBolt,
+  IconDeviceDesktopAnalytics,
   IconLogout,
   IconServer2,
   IconSettings,
@@ -51,24 +50,13 @@ export default function RightNavBar({
             </Drawer.Title>
             <Drawer.CloseButton />
           </Drawer.Header>
-
           <Drawer.Body>
             <NavLink
               component={Link}
-              label="Current workspace"
-              leftSection={<IconDeviceDesktopBolt size="1rem" stroke={1.5} />}
-              onClick={() => close()}
-              hiddenFrom="sm"
-              disabled
-            />
-            <Divider mt={10} mb={10} hiddenFrom="sm" />
-            <NavLink
-              component={Link}
-              to="/"
+              to="/workspace"
               label="Your workspaces"
-              leftSection={<IconDeviceDesktop size="1rem" stroke={1.5} />}
+              leftSection={<IconDeviceDesktopAnalytics size="1rem" stroke={1.5} />}
               onClick={() => close()}
-              disabled
             />
             <NavLink
               component={Link}

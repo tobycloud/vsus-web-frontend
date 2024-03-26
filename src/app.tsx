@@ -11,6 +11,7 @@ import EnterResetPasswordCode from "./pages/Auth/ForgotPassword/EnterCode";
 import ResetPassword from "./pages/Auth/ForgotPassword/ResetPassword";
 import SignIn from "./pages/Auth/SignIn";
 import SignUp from "./pages/Auth/SignUp";
+import Error404 from "./pages/Error/404";
 import Home from "./pages/Home";
 import SettingsAccount from "./pages/Settings/Account";
 import SettingsAccount2FA from "./pages/Settings/Account/2FA";
@@ -21,7 +22,8 @@ import SettingsAccountPhoneNumberConfirmation from "./pages/Settings/Account/Pho
 import SettingsAccountPhoneNumberVerification from "./pages/Settings/Account/PhoneNumber/Verification";
 import SettingsPreferences from "./pages/Settings/Preferences";
 import SettingsPreferencesEditProfile from "./pages/Settings/Preferences/EditProfile";
-import WorkspaceHome from "./pages/Workspace/Home";
+import WorkspaceHome from "./pages/Workspace";
+import WorkspaceOverview from "./pages/Workspace/Overview";
 
 const routes: RouteObject[] = [
   {
@@ -74,7 +76,7 @@ const routes: RouteObject[] = [
       },
       {
         path: "/workspace/:workspaceId",
-        element: <WorkspaceHome />,
+        element: <WorkspaceOverview />,
         loader: async ({ params }) => {
           const { workspaceId } = params;
           // Load workspace data
@@ -87,6 +89,10 @@ const routes: RouteObject[] = [
             return { workspace: null };
           }
         },
+      },
+      {
+        path: "*",
+        element: <Error404 />,
       },
     ],
   },

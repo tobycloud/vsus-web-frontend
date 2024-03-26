@@ -1,9 +1,13 @@
-import { Box, Button, Modal, TextInput } from "@mantine/core";
+import { Alert, Box, Button, Modal, TextInput } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { getWorkspace } from "../../database";
+import { IconInfoCircle } from "@tabler/icons-react";
+import { useState } from "preact/hooks";
+import { useNavigate } from "react-router-dom";
+import pocketbase, { createWorkspace } from "../../database";
+import { User } from "../../database/models";
 
-export default function CreateWorkspaceModal(): {
+export default function CreateWorkspaceModal({ user }: { user: User }): {
   element: JSX.Element;
   state: boolean;
   close: () => void;
@@ -22,6 +26,10 @@ export default function CreateWorkspaceModal(): {
     },
   });
 
+  const [error, setError] = useState<boolean>(false);
+
+  const navigate = useNavigate();
+
   return {
     element: (
       <Modal
@@ -38,9 +46,21 @@ export default function CreateWorkspaceModal(): {
         <Box
           component="form"
           onSubmit={form.onSubmit(async () => {
-            await getWorkspace(form.values.name);
+            const workspace = await createWorkspace(user, form.values.name);
+            if (!workspace) {
+              setError(true);
+              return;
+            }
+            pocketbase.collection("users").authRefresh();
+            navigate(`/workspace/${workspace.id}`);
+            controls.close();
           })}
         >
+          {error && (
+            <Alert variant="light" color="red" title="Error!" mb="md" icon={<IconInfoCircle />}>
+              Something went wrong while creating the workspace.
+            </Alert>
+          )}
           <TextInput {...form.getInputProps("name")} placeholder="Workspace name" mb="md" />
           <Button variant="light" fw={400} color="vsus-button" type="submit">
             Create

@@ -8,7 +8,7 @@ export default function AuthLayout({ title, children }: { title: string; childre
         <Box style={{ alignItems: "center", flexDirection: "column" }} display="flex">
           <Box display="flex" style={{ alignItems: "center", pointerEvents: "none" }} mb="lg">
             <Image src="../../images/icons/vsus.svg" w="50px" h="auto" alt="logo" />
-            <Title order={1} ml="md">
+            <Title order={1} ml="md" ff="Readex Pro">
               vSuS
             </Title>
           </Box>

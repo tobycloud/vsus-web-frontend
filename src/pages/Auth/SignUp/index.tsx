@@ -1,17 +1,16 @@
 import { Alert, Box, Button, Input, PasswordInput, Text } from "@mantine/core";
 import { hasLength, isEmail, useForm } from "@mantine/form";
-import { IconAt, IconKey, IconReload, IconUser } from "@tabler/icons-react";
+import { IconAt, IconInfoCircle, IconKey, IconReload, IconUser } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
 import { Link, useNavigate } from "react-router-dom";
 import { userSignUp } from "../../../database";
+import { setDocumentTitle } from "../../../utils";
 import AuthLayout from "../Layout";
 import classes from "../index.module.css";
-import { setDocumentTitle } from "../../../utils";
 
 export default function SignUp() {
-
   useEffect(() => {
-    setDocumentTitle("Sign up")
+    setDocumentTitle("Sign up");
   }, []);
 
   const form = useForm({
@@ -36,7 +35,7 @@ export default function SignUp() {
   return (
     <AuthLayout title="Create a new account">
       {!!errorDuringSignUp && (
-        <Alert variant="light" color="red" title="Error!" mt="xl">
+        <Alert variant="light" color="red" title="Error!" mt="xl" icon={<IconInfoCircle />}>
           {errorDuringSignUp}
         </Alert>
       )}

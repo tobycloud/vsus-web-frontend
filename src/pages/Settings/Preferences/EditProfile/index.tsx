@@ -14,9 +14,9 @@ import { base64toFile } from "../../../../utils";
 const SettingsPreferencesEditProfile = () => {
   const isMobile = useMediaQuery(`(max-width: 36em)`);
 
-  const navigate = useNavigate();
-
   const user = pocketbase.authStore.model as User;
+
+  const navigate = useNavigate();
 
   const form = useForm({
     initialValues: {

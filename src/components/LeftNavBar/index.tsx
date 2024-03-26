@@ -1,5 +1,5 @@
-import { Box, Divider, Drawer, Flex, NavLink, Text } from "@mantine/core";
-import { IconDeviceDesktop, IconHome, IconSearch } from "@tabler/icons-react";
+import { Box, Divider, Drawer, Flex, Group, NavLink, Text } from "@mantine/core";
+import { IconDeviceDesktopAnalytics, IconHome, IconSearch } from "@tabler/icons-react";
 import { RecordModel } from "pocketbase";
 import { useEffect, useState } from "preact/hooks";
 import { Link } from "react-router-dom";
@@ -12,11 +12,11 @@ export default function LeftNavBar({ opened, close, user }: { opened: boolean; c
 
   useEffect(() => {
     const fetchWorkspaces = async () => {
-      setWorkspaces(await getLimitWorkspaces(user, 0, 5));
+      setWorkspaces(await getLimitWorkspaces(user, 0, 20));
     };
 
     fetchWorkspaces();
-  }, []);
+  }, [user]);
 
   return (
     <>
@@ -44,7 +44,7 @@ export default function LeftNavBar({ opened, close, user }: { opened: boolean; c
                 {workspaces.map((workspace) => (
                   <NavLink
                     key={workspace.id}
-                    leftSection={<IconDeviceDesktop size={20} />}
+                    leftSection={<IconDeviceDesktopAnalytics size={20} />}
                     component={Link}
                     to={`/workspace/${workspace.id}`}
                     label={workspace.name}
@@ -54,6 +54,19 @@ export default function LeftNavBar({ opened, close, user }: { opened: boolean; c
               </Flex>
             </Box>
             <Divider mt={10} mb={10} />
+            <Box mt="lg">
+              <Text size="xs" c="dimmed">
+                © {new Date().getFullYear()} DaCloud™
+              </Text>
+              <Group mt="md">
+                <Text size="xs" c="vsus-natural" component={Link} to="https://vsus.app/tos" target="_blank">
+                  Terms
+                </Text>
+                <Text size="xs" c="vsus-natural" component={Link} to="https://vsus.app/privacy" target="_blank">
+                  Privacy
+                </Text>
+              </Group>
+            </Box>
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>
