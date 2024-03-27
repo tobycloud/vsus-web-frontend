@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import CreateWorkspaceModal from "../../components/CreateWorkspaceModal";
 import pocketbase, { getAvatar, getLimitWorkspaces, getUser } from "../../database";
 import { User } from "../../database/models";
+import { setDocumentTitle } from "../../utils";
 import Loading from "../Loading";
 
 export default function WorkspaceHome() {
@@ -27,6 +28,7 @@ export default function WorkspaceHome() {
     };
 
     fetchWorkspaces();
+    setDocumentTitle("Your workspaces");
   }, []);
 
   if (workspaces.length === 0) return <Loading />;
@@ -46,21 +48,21 @@ export default function WorkspaceHome() {
               bg="dark"
               style={{ borderRadius: "var(--mantine-radius-md)" }}
               styles={{
-                inner: { justifyContent: "space-between" },
+                inner: { justifyContent: "space-between", width: "100%" },
+                label: { width: "100%" },
               }}
               h="100%"
               w="100%"
               component={Link}
               to={`/workspace/${item.id}`}
-              leftSection={
+            >
+              <Group w="100%" justify="space-between">
                 <Group>
                   <IconDeviceDesktopAnalytics size={30} />
                   <Title order={4} c="white" align="left">
                     {item.name}
                   </Title>
                 </Group>
-              }
-              rightSection={
                 <Group gap={5}>
                   {item.avatar.slice(0, 2).map((avatar: string) => (
                     <Avatar src={avatar} />
@@ -74,8 +76,8 @@ export default function WorkspaceHome() {
                     </Box>
                   )}
                 </Group>
-              }
-            />
+              </Group>
+            </Button>
           </Grid.Col>
         ))}
         <Grid.Col span={{ base: 12, md: 6 }}>

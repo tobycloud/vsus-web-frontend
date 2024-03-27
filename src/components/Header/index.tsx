@@ -1,12 +1,13 @@
-import { ActionIcon, Avatar, Box, Button, Code, Flex, Group, Indicator, Menu, Text, Tooltip, UnstyledButton, rem } from "@mantine/core";
+import { ActionIcon, Avatar, Box, Code, Flex, Group, Indicator, Text, Tooltip, UnstyledButton, rem } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { spotlight } from "@mantine/spotlight";
-import { IconChevronDown, IconDeviceDesktopAnalytics, IconInbox, IconMenu2, IconPlus, IconSearch, IconServer2 } from "@tabler/icons-react";
+import { IconInbox, IconMenu2, IconSearch } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
 import { Link, useNavigate } from "react-router-dom";
 import pocketbase, { getAvatar } from "../../database";
 import { User } from "../../database/models";
 import { borderLine } from "../../utils";
+import CreateNewDropdown from "../CreateNewDropdown";
 import CreateWorkspaceModal from "../CreateWorkspaceModal";
 import LeftNavBar from "../LeftNavBar";
 import Logo from "../Logo";
@@ -76,19 +77,9 @@ export function Header() {
             <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg" hiddenFrom="lg" onClick={spotlight.open}>
               <IconSearch size={20} />
             </ActionIcon>
-            <Menu shadow="md" width={200}>
-              <Menu.Target>
-                <Button variant="light" color="vsus-button" rightSection={<IconChevronDown size={20} />} p="xs">
-                  <IconPlus size={20} />
-                </Button>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item leftSection={<IconDeviceDesktopAnalytics style={{ width: rem(14), height: rem(14) }} />} onClick={createWorkspace.open}>
-                  New workspace
-                </Menu.Item>
-                <Menu.Item leftSection={<IconServer2 style={{ width: rem(14), height: rem(14) }} />}>New instance</Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
+            <Box visibleFrom="xs">
+              <CreateNewDropdown newWorkspace={createWorkspace.open} />
+            </Box>
             <Indicator color="red" size={15} withBorder disabled>
               <Tooltip label="You have no unread notifications" color="primary" openDelay={250}>
                 <ActionIcon variant="light" aria-label="new-workspace" color="vsus-button" size="lg">
@@ -101,7 +92,7 @@ export function Header() {
         </Flex>
       </header>
       <SearchMenu />
-      <LeftNavBar opened={openedLeft} close={closeLeft} user={user} />
+      <LeftNavBar opened={openedLeft} close={closeLeft} />
       <RightNavBar opened={openedRight} close={closeRight} username={user?.username} name={user?.name} avatar={avatar} />
     </>
   );

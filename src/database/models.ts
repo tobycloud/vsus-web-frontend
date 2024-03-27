@@ -23,13 +23,13 @@ export interface User {
   rawFollowing: string[];
   commonFollowing: { [key: string]: User[] };
   expanded: boolean;
-  workspaces: Workspace[];
 } // khai tử these things soon
 
-export interface Workspace {
-  id: string;
-  owner: User;
-  name: string;
-  created: string;
-  updated: string;
-}
+// export interface Workspace {
+//   id: string;
+//   owner: User;
+//   collaborators: User[];
+//   name: string;
+//   created: string;
+//   updated: string;
+// }

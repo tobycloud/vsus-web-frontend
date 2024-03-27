@@ -12,6 +12,9 @@ import {
 } from "@tabler/icons-react";
 import { Link, useNavigate } from "react-router-dom";
 import pocketbase from "../../database";
+import { User } from "../../database/models";
+import CreateNewDropdown from "../CreateNewDropdown";
+import CreateWorkspaceModal from "../CreateWorkspaceModal";
 
 export default function RightNavBar({
   opened,
@@ -28,17 +31,20 @@ export default function RightNavBar({
 }) {
   const [signOutModalOpened, { open: openSignOutModal, close: closeSignOutModal }] = useDisclosure(false);
   const navigate = useNavigate();
+  const user = pocketbase.authStore.model as User;
+  const createWorkspace = CreateWorkspaceModal({ user });
 
   return (
     <>
+      {createWorkspace.element}
       <Drawer.Root opened={opened} onClose={close} overlayProps={{ backgroundOpacity: 0.5, blur: 4 }} position="right" size="xs">
         <Drawer.Overlay />
         <Drawer.Content>
           <Drawer.Header>
             <Drawer.Title>
-              <Flex align={"center"}>
+              <Group gap="sm">
                 <Avatar src={avatar} alt={name} radius="xl" size="md" />
-                <Box ml="sm">
+                <Box>
                   <Text size="lg" lineClamp={1}>
                     {username}
                   </Text>
@@ -46,9 +52,19 @@ export default function RightNavBar({
                     {name}
                   </Text>
                 </Box>
-              </Flex>
+              </Group>
             </Drawer.Title>
-            <Drawer.CloseButton />
+            <Flex align="center">
+              <Box hiddenFrom="xs" mr="md">
+                <CreateNewDropdown
+                  newWorkspace={() => {
+                    createWorkspace.open();
+                    close();
+                  }}
+                />
+              </Box>
+              <Drawer.CloseButton styles={{}} />
+            </Flex>
           </Drawer.Header>
           <Drawer.Body>
             <NavLink

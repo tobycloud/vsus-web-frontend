@@ -2,7 +2,7 @@ import { MantineProvider } from "@mantine/core";
 import { RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./app.css";
 
-import { getWorkspace } from "./database";
+import { getAvatar, getUser, getWorkspace } from "./database";
 
 import Content from "./components/Content";
 import AuthContent from "./components/Content/Auth";
@@ -84,7 +84,23 @@ const routes: RouteObject[] = [
           if (!workspaceId) return { workspace: null };
 
           try {
-            return { workspace: await getWorkspace(workspaceId) };
+            const workspace = await getWorkspace(workspaceId);
+            const ownerUser = await getUser(workspace.owner);
+            const ownerAvatar = {
+              avatar: await getAvatar(ownerUser),
+              user: ownerUser,
+            };
+            const collaboratorsAvatars = await Promise.all(
+              workspace.collaborators.map(async (collaborator: string) => {
+                const collaboratorUser = await getUser(collaborator);
+                return {
+                  avatar: await getAvatar(collaboratorUser),
+                  user: collaboratorUser,
+                };
+              })
+            );
+            workspace.avatar = [ownerAvatar, ...collaboratorsAvatars];
+            return { workspace: workspace };
           } catch (error) {
             return { workspace: null };
           }

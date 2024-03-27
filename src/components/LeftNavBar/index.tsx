@@ -3,20 +3,27 @@ import { IconDeviceDesktopAnalytics, IconHome, IconSearch } from "@tabler/icons-
 import { RecordModel } from "pocketbase";
 import { useEffect, useState } from "preact/hooks";
 import { Link } from "react-router-dom";
-import { getLimitWorkspaces } from "../../database";
+import pocketbase, { getLimitWorkspaces } from "../../database";
 import { User } from "../../database/models";
 import Logo from "../Logo";
 
-export default function LeftNavBar({ opened, close, user }: { opened: boolean; close: () => void; user: User }) {
+export default function LeftNavBar({ opened, close }: { opened: boolean; close: () => void }) {
   const [workspaces, setWorkspaces] = useState<RecordModel[]>([]);
+  const user = pocketbase.authStore.model as User;
+
+  const fetchWorkspaces = async () => {
+    setWorkspaces(await getLimitWorkspaces(user, 0, 5));
+  };
 
   useEffect(() => {
-    const fetchWorkspaces = async () => {
-      setWorkspaces(await getLimitWorkspaces(user, 0, 20));
-    };
-
     fetchWorkspaces();
-  }, [user]);
+  }, []);
+
+  useEffect(() => {
+    const location = window.location.pathname.split("/");
+    if (location[1] !== "workspace") return;
+    if (!workspaces.map((workspace) => workspace.id).includes(location[2])) fetchWorkspaces();
+  }, [window.location.pathname]); // handle workspace addition
 
   return (
     <>
@@ -51,6 +58,11 @@ export default function LeftNavBar({ opened, close, user }: { opened: boolean; c
                     onClick={() => close()}
                   />
                 ))}
+                {workspaces.length === 0 && (
+                  <Text size="sm" style={{ padding: "calc(0.5rem* var(--mantine-scale)) var(--mantine-spacing-sm)" }}>
+                    No workspaces
+                  </Text>
+                )}
               </Flex>
             </Box>
             <Divider mt={10} mb={10} />

@@ -1,8 +1,11 @@
-import { ActionIcon, Box, Button, Center, CopyButton, Divider, Flex, Grid, Group, Text, Title, Tooltip, rem } from "@mantine/core";
+import { ActionIcon, Avatar, Box, Button, Center, CopyButton, Divider, Flex, Grid, Group, HoverCard, Text, Title, Tooltip, rem } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconAdjustments, IconCheck, IconCircleFilled, IconCopy, IconDeviceDesktopAnalytics, IconPlus } from "@tabler/icons-react";
+import { IconAdjustments, IconCheck, IconCircleFilled, IconCopy, IconDeviceDesktopAnalytics, IconPlus, IconUser } from "@tabler/icons-react";
 import { RecordModel } from "pocketbase";
-import { useLoaderData } from "react-router-dom";
+import { useEffect } from "preact/hooks";
+import { Link, useLoaderData } from "react-router-dom";
+import { User } from "../../../database/models";
+import { setDocumentTitle } from "../../../utils";
 import Error404 from "../../Error/404";
 import classes from "./index.module.css";
 
@@ -31,19 +34,49 @@ export default function WorkspaceOverview() {
 
   if (!workspace) return <Error404 />;
 
+  useEffect(() => {
+    setDocumentTitle(`${workspace.name} | Workspace`);
+  }, [workspace]);
+
   return (
     <Box>
       <Flex justify="space-between">
-        <Group>
+        <Group w="100%" mr="lg">
           <IconDeviceDesktopAnalytics size={40} />
-          <Title order={2} mr="md">
-            {workspace.name}
-          </Title>
+          <Title order={2}>{workspace.name}</Title>
         </Group>
         <ActionIcon variant="light" size="lg" radius="sm" aria-label="Workspace's Option">
           <IconAdjustments size={20} />
         </ActionIcon>
       </Flex>
+      <Group mt="lg">
+        {workspace.avatar.map((avatar: { avatar: string; user: User }, index: number) => (
+          <HoverCard width="max-content" shadow="md" openDelay={250}>
+            <HoverCard.Target>
+              <Avatar src={avatar.avatar} component={Link} to={`/user/${avatar.user.username}`} />
+            </HoverCard.Target>
+            <HoverCard.Dropdown bg="dark">
+              <Box>
+                <Group gap="sm" component={Link} to={`/user/${avatar.user.username}`} style={{ textDecoration: "none" }} w="max-content">
+                  <Avatar src={avatar.avatar} alt={avatar.user.username} radius="xl" size="md" />
+                  <Box>
+                    <Text size="lg" lineClamp={1} c="white">
+                      {avatar.user.username}
+                    </Text>
+                    <Text size="xs" c="gray" lineClamp={1}>
+                      {avatar.user.name}
+                    </Text>
+                  </Box>
+                </Group>
+                <Group mt="md" gap="sm">
+                  <IconUser size={15} />
+                  <Text size="sm">{index == 0 ? "Owner" : "Collaborator"}</Text>
+                </Group>
+              </Box>
+            </HoverCard.Dropdown>
+          </HoverCard>
+        ))}
+      </Group>
       <Divider my="lg" />
       <Title order={3}>Overview</Title>
       <Grid mt="md" mb="xl">

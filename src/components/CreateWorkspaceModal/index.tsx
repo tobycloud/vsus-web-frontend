@@ -1,5 +1,5 @@
 import { Alert, Box, Button, Modal, TextInput } from "@mantine/core";
-import { isNotEmpty, useForm } from "@mantine/form";
+import { hasLength, isNotEmpty, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { useState } from "preact/hooks";
@@ -22,7 +22,7 @@ export default function CreateWorkspaceModal({ user }: { user: User }): {
     },
 
     validate: {
-      name: isNotEmpty("Workspace name is required"),
+      name: isNotEmpty("Workspace name is required") && hasLength({ min: 1, max: 25 }, "Name must be 1-25 characters long"),
     },
   });
 
@@ -46,14 +46,20 @@ export default function CreateWorkspaceModal({ user }: { user: User }): {
         <Box
           component="form"
           onSubmit={form.onSubmit(async () => {
-            const workspace = await createWorkspace(user, form.values.name);
-            if (!workspace) {
+            try {
+              const workspace = await createWorkspace(user, form.values.name);
+              if (!workspace) {
+                setError(true);
+                return;
+              }
+              setError(false);
+              pocketbase.collection("users").authRefresh();
+              navigate(`/workspace/${workspace.id}`);
+              controls.close();
+              form.reset();
+            } catch (error) {
               setError(true);
-              return;
             }
-            pocketbase.collection("users").authRefresh();
-            navigate(`/workspace/${workspace.id}`);
-            controls.close();
           })}
         >
           {error && (
