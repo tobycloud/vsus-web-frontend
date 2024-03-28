@@ -1,4 +1,4 @@
-import { Avatar, Button, Center, Container, Divider, Grid, Group, Text, Title } from "@mantine/core";
+import { Avatar, Box, Button, Center, Container, Divider, Grid, Group, Text, Title } from "@mantine/core";
 import { IconDeviceDesktopAnalytics, IconPlus } from "@tabler/icons-react";
 import { RecordModel } from "pocketbase";
 import { useEffect, useState } from "preact/hooks";
@@ -8,6 +8,7 @@ import pocketbase, { getAvatar, getLimitWorkspaces, getUser } from "../../databa
 import { User } from "../../database/models";
 import { setDocumentTitle } from "../../utils";
 import Loading from "../Loading";
+import classes from "./index.module.css";
 
 export default function WorkspaceHome() {
   const user = pocketbase.authStore.model as User;
@@ -65,18 +66,22 @@ export default function WorkspaceHome() {
                 </Group>
                 <Avatar.Group>
                   {item.avatar.slice(0, 2).map((avatar: string) => (
-                    <Avatar src={avatar} style={{ border: "calc(0.125rem * var(--mantine-scale)) solid var(--mantine-color-dark-filled)" }} />
+                    <Avatar src={avatar} className={classes.avatar} />
                   ))}
                   {item.avatar.length > 2 && (
-                    <Avatar
-                      style={{
-                        border: "calc(0.125rem * var(--mantine-scale)) solid var(--mantine-color-dark-filled)",
-                        background: `url(${item.avatar[2]})`,
-                        backgroundSize: "cover",
-                      }}
-                    >
-                      <Text>+{item.avatar.length - 2}</Text>
-                    </Avatar>
+                    <Box style={{ position: "relative" }}>
+                      <Avatar
+                        style={{
+                          background: `url(${item.avatar[2]})`,
+                          backgroundSize: "cover",
+                        }}
+                        className={classes.avatar + " " + classes.andMore}
+                      >
+                        <Text c="white" style={{ position: "relative", zIndex: 2 }}>
+                          +{item.avatar.length - 2}
+                        </Text>
+                      </Avatar>
+                    </Box>
                   )}
                 </Avatar.Group>
               </Group>

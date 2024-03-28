@@ -39,3 +39,15 @@ export function formatPhoneNumber(phoneNumber: string): string {
 }
 
 export const borderLine = "calc(0.0625rem * var(--mantine-scale)) solid var(--app-shell-border-color)";
+// stringExtensions.ts
+declare global {
+  interface String {
+    toTitleCase(): string;
+  }
+}
+
+String.prototype.toTitleCase = function () {
+  return this.replace(/\w\S*/g, function (txt) {
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
+};

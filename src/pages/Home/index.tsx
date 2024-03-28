@@ -74,9 +74,11 @@ export default function Home() {
                 <IconDots size={20} />
               </UnstyledButton>
             </Menu.Target>
-            <Menu.Dropdown>
-              <Menu.Item leftSection={<IconMessageOff style={{ width: rem(14), height: rem(14) }} />}>Show less activities from Toby Cm</Menu.Item>
-              <Menu.Item leftSection={<IconUserMinus style={{ width: rem(14), height: rem(14) }} />}>Unfollow Toby Cm</Menu.Item>
+            <Menu.Dropdown bg="dark">
+              <Menu.Item leftSection={<IconMessageOff style={{ width: rem(14), height: rem(14) }} />}>
+                Show less activities from {user.name}
+              </Menu.Item>
+              <Menu.Item leftSection={<IconUserMinus style={{ width: rem(14), height: rem(14) }} />}>Unfollow {user.name}</Menu.Item>
               <Menu.Item color="red" leftSection={<IconMessageExclamation style={{ width: rem(14), height: rem(14) }} />}>
                 Report
               </Menu.Item>

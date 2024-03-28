@@ -48,39 +48,45 @@ export default function UserHoverCard({ profile, children, workspaceOwner }: { p
                 {profile.aboutMe}
               </Text>
             )}
-            <Group mb="md" gap="xs">
-              <IconUsersGroup size={15} />
-              <Text size="sm" component={Link} c="white" to={`/user/${profile.username}/?tab=followers`} className={classes.link}>
-                {profile.followers.length} follower{profile.followers.length != 1 && "s"}
+            <Group mb="sm" gap="xs">
+              <IconUsersGroup size={15} style={{ color: "var(--mantine-color-dimmed)" }} />
+              <Text size="sm" component={Link} c="dimmed" to={`/user/${profile.username}/?tab=followers`} className={classes.link}>
+                <Text size="sm" c="white" fw={600} component={"span"}>
+                  {profile.following.length}
+                </Text>{" "}
+                follower{profile.followers.length != 1 && "s"}
               </Text>
-              ·
-              <Text size="sm" component={Link} c="white" to={`/user/${profile.username}/?tab=following`} className={classes.link}>
-                {profile.following.length} following{profile.following.length != 1 && "s"}
+              <Text c="dimmed">·</Text>
+              <Text size="sm" component={Link} c="dimmed" to={`/user/${profile.username}/?tab=following`} className={classes.link}>
+                <Text size="sm" c="white" fw={600} component={"span"}>
+                  {profile.following.length}
+                </Text>{" "}
+                following{profile.following.length != 1 && "s"}
               </Text>
             </Group>
             {/* {profile.location && (
-                  <Group mb="md" gap="xs">
-                    <IconMapPin size={15} />
+                  <Group mb="sm" gap="xs">
+                    <IconMapPin size={15} style={{ color: "var(--mantine-color-dimmed)" }} />
                     <Text>{profile.location}</Text>
                   </Group>
                 )}
                 {profile.organization && (
-                  <Group mb="md" gap="xs">
-                    <IconBuilding size={15} />
+                  <Group mb="sm" gap="xs">
+                    <IconBuilding size={15} style={{ color: "var(--mantine-color-dimmed)" }} />
                     <Text>{profile.organization}</Text>
                   </Group>
                 )} */}
             {profile.emailVisibility && profile.email && (
-              <Group mb="md" gap="xs">
-                <IconMail size={15} />
+              <Group mb="sm" gap="xs">
+                <IconMail size={15} style={{ color: "var(--mantine-color-dimmed)" }} />
                 <Text size="sm" component={Anchor} c="white" href={`mailto:${profile.email}`}>
                   {profile.email}
                 </Text>
               </Group>
             )}
             {profile.phoneNumberVisibility && profile.phoneNumber && (
-              <Group mb="md" gap="xs">
-                <IconPhone size={15} />
+              <Group mb="sm" gap="xs">
+                <IconPhone size={15} style={{ color: "var(--mantine-color-dimmed)" }} />
                 <Text size="sm">{profile.phoneNumber}</Text>
               </Group>
             )}

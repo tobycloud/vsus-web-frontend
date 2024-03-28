@@ -1,6 +1,6 @@
 import { ActionIcon, Avatar, Box, Button, Center, Container, CopyButton, Divider, Flex, Grid, Group, Text, Title, Tooltip, rem } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconAdjustments, IconCheck, IconCircleFilled, IconCopy, IconDeviceDesktopAnalytics, IconPlus } from "@tabler/icons-react";
+import { IconAdjustments, IconCheck, IconCircleFilled, IconCopy, IconDeviceDesktopAnalytics, IconPlus, IconUserCode } from "@tabler/icons-react";
 import { useEffect } from "preact/hooks";
 import { Link, useLoaderData } from "react-router-dom";
 import UserHoverCard from "../../../components/UserHoverCard";
@@ -49,7 +49,8 @@ export default function WorkspaceOverview() {
           <IconAdjustments size={20} />
         </ActionIcon>
       </Flex>
-      <Group mt="lg" gap="sm">
+      <Group mt="lg" gap="xs">
+        <IconUserCode size={25} style={{ color: "var(--mantine-color-dimmed)" }} />
         {workspace.users.map((user: User, index: number) => {
           console.log(user);
           return (

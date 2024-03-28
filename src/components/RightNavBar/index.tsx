@@ -135,7 +135,7 @@ export default function RightNavBar({
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>
-      <Modal opened={signOutModalOpened} onClose={closeSignOutModal} centered withCloseButton={false} padding="lg" radius="lg">
+      <Modal opened={signOutModalOpened} onClose={closeSignOutModal} centered withCloseButton={false} padding="lg" radius="md">
         <Box>
           <Title order={3} mb="xs">
             Sign out

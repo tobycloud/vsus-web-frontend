@@ -5,6 +5,7 @@ import { useEffect, useState } from "preact/hooks";
 import { Link, useLoaderData } from "react-router-dom";
 import pocketbase from "../../database";
 import { User } from "../../database/models";
+import { setDocumentTitle } from "../../utils";
 import Error404 from "../Error/404";
 import ProfileFollow from "./Follow";
 import classes from "./index.module.css";
@@ -19,7 +20,10 @@ export default function Profile() {
   const [currentTab, setCurrentTab] = useState(new URLSearchParams(location.search).get("tab"));
 
   useEffect(() => {
-    setCurrentTab(new URLSearchParams(location.search).get("tab"));
+    let tab = new URLSearchParams(location.search).get("tab") || "";
+    !["followers", "following"].includes(tab) && (tab = "");
+    setCurrentTab(tab);
+    setDocumentTitle(`${tab != "" ? `${tab.toTitleCase()} - ` : ""} ${profile.username} ${profile.name != "" ? `(${profile.name})` : ""}`);
   }, [location.search]);
 
   return (
@@ -90,30 +94,36 @@ export default function Profile() {
             <Box w="100%">
               {profile.aboutMe && <Text mb="lg">{profile.aboutMe}</Text>}
               <Group mb="md" gap="xs">
-                <IconUsersGroup size={20} />
-                <Text component={Link} c="white" to="?tab=followers" className={classes.link}>
-                  {profile.followers.length} follower{profile.followers.length != 1 && "s"}
+                <IconUsersGroup size={20} style={{ color: "var(--mantine-color-dimmed)" }} />
+                <Text component={Link} c="dimmed" to="?tab=followers" className={classes.link}>
+                  <Text c="white" fw={600} component={"span"}>
+                    {profile.followers.length}
+                  </Text>{" "}
+                  follower{profile.followers.length != 1 && "s"}
                 </Text>
-                ·
-                <Text component={Link} c="white" to="?tab=following" className={classes.link}>
-                  {profile.following.length} following
+                <Text c="dimmed">·</Text>
+                <Text component={Link} c="dimmed" to="?tab=following" className={classes.link}>
+                  <Text c="white" fw={600} component={"span"}>
+                    {profile.following.length}
+                  </Text>{" "}
+                  following
                 </Text>
               </Group>
               {/* {profile.location && (
               <Group mb="md" gap="xs">
-                <IconMapPin size={20} />
+                <IconMapPin size={20} style={{ color: "var(--mantine-color-dimmed)" }} />
                 <Text >{profile.location}</Text>
               </Group>
             )}
             {profile.organization && (
               <Group mb="md" gap="xs">
-                <IconBuilding size={20} />
+                <IconBuilding size={20} style={{ color: "var(--mantine-color-dimmed)" }} />
                 <Text >{profile.organization}</Text>
               </Group>
             )} */}
               {profile.emailVisibility && profile.email && (
                 <Group mb="md" gap="xs">
-                  <IconMail size={20} />
+                  <IconMail size={20} style={{ color: "var(--mantine-color-dimmed)" }} />
                   <Text component={Anchor} href={`mailto:${profile.email}`} c="white">
                     {profile.email}
                   </Text>
@@ -121,7 +131,7 @@ export default function Profile() {
               )}
               {profile.phoneNumberVisibility && profile.phoneNumber && (
                 <Group mb="md" gap="xs">
-                  <IconPhone size={20} />
+                  <IconPhone size={20} style={{ color: "var(--mantine-color-dimmed)" }} />
                   <Text>{profile.phoneNumber}</Text>
                 </Group>
               )}
