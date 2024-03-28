@@ -1,4 +1,4 @@
-import { Alert, Badge, Box, Button, Center, Flex, Group, Text, Title, Tooltip } from "@mantine/core";
+import { Alert, Badge, Button, Center, Container, Flex, Group, Text, Title, Tooltip } from "@mantine/core";
 import { IconCheck, IconInfoCircle } from "@tabler/icons-react";
 import { useEffect } from "preact/hooks";
 import { Link } from "react-router-dom";
@@ -19,7 +19,7 @@ const SettingsAccount = () => {
   const phoneNumberUpdated = new URLSearchParams(window.location.search).get("phoneNumberUpdated");
 
   return (
-    <Box>
+    <Container>
       <Title order={2}>Account</Title>
       {phoneNumberUpdated && (
         <Alert variant="light" mt="md" color="green" title="Success!" icon={<IconInfoCircle />}>
@@ -132,7 +132,7 @@ const SettingsAccount = () => {
           </Center>
         }
       />
-    </Box>
+    </Container>
   );
 };
 

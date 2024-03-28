@@ -2,10 +2,11 @@ import { MantineProvider } from "@mantine/core";
 import { RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./app.css";
 
-import { getAvatar, getUser, getWorkspace } from "./database";
+import { getAvatar, getBanner, getUser, getUserFromUsername, getWorkspace } from "./database";
 
 import Content from "./components/Content";
 import AuthContent from "./components/Content/Auth";
+import { User } from "./database/models";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import EnterResetPasswordCode from "./pages/Auth/ForgotPassword/EnterCode";
 import ResetPassword from "./pages/Auth/ForgotPassword/ResetPassword";
@@ -13,6 +14,7 @@ import SignIn from "./pages/Auth/SignIn";
 import SignUp from "./pages/Auth/SignUp";
 import Error404 from "./pages/Error/404";
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 import SettingsAccount from "./pages/Settings/Account";
 import SettingsAccount2FA from "./pages/Settings/Account/2FA";
 import { SettingsAccountDeleteAccount } from "./pages/Settings/Account/DeleteAccount";
@@ -85,24 +87,38 @@ const routes: RouteObject[] = [
 
           try {
             const workspace = await getWorkspace(workspaceId);
-            const ownerUser = await getUser(workspace.owner);
-            const ownerAvatar = {
-              avatar: await getAvatar(ownerUser),
-              user: ownerUser,
-            };
-            const collaboratorsAvatars = await Promise.all(
+            const ownerUser = (await getUser(workspace.owner)) as unknown as User;
+            ownerUser.avatar = await getAvatar(ownerUser);
+            const collaboratorsUsers = (await Promise.all(
               workspace.collaborators.map(async (collaborator: string) => {
                 const collaboratorUser = await getUser(collaborator);
-                return {
-                  avatar: await getAvatar(collaboratorUser),
-                  user: collaboratorUser,
-                };
+                collaboratorUser.avatar = await getAvatar(collaboratorUser);
+                return collaboratorUser;
               })
-            );
-            workspace.avatar = [ownerAvatar, ...collaboratorsAvatars];
+            )) as User[];
+            workspace.users = [ownerUser, ...collaboratorsUsers];
             return { workspace: workspace };
           } catch (error) {
             return { workspace: null };
+          }
+        },
+      },
+      {
+        path: "/user/:username",
+        element: <Profile />,
+        loader: async ({ params }) => {
+          const { username } = params;
+          if (!username) return { profile: null };
+
+          try {
+            const userList = await getUserFromUsername(username);
+            if (userList.length === 0) return { profile: null };
+            const user = userList[0];
+            user.avatar = (await getAvatar(user)) || "";
+            user.banner = (await getBanner(user)) || "";
+            return { profile: user };
+          } catch (error) {
+            return { profile: null };
           }
         },
       },

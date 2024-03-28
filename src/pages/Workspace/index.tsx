@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Center, Divider, Grid, Group, Overlay, Text, Title } from "@mantine/core";
+import { Avatar, Button, Center, Container, Divider, Grid, Group, Text, Title } from "@mantine/core";
 import { IconDeviceDesktopAnalytics, IconPlus } from "@tabler/icons-react";
 import { RecordModel } from "pocketbase";
 import { useEffect, useState } from "preact/hooks";
@@ -36,7 +36,7 @@ export default function WorkspaceHome() {
   const createWorkspace = CreateWorkspaceModal({ user });
 
   return (
-    <Box>
+    <Container size="xl">
       {createWorkspace.element}
       <Title order={2}>Your workspaces</Title>
       <Divider my="lg" />
@@ -63,19 +63,22 @@ export default function WorkspaceHome() {
                     {item.name}
                   </Title>
                 </Group>
-                <Group gap={5}>
+                <Avatar.Group>
                   {item.avatar.slice(0, 2).map((avatar: string) => (
-                    <Avatar src={avatar} />
+                    <Avatar src={avatar} style={{ border: "calc(0.125rem * var(--mantine-scale)) solid var(--mantine-color-dark-filled)" }} />
                   ))}
                   {item.avatar.length > 2 && (
-                    <Box style={{ position: "relative" }}>
-                      <Overlay radius="50%">
-                        <Center h="100%">+{item.avatar.length - 2}</Center>
-                      </Overlay>
-                      <Avatar src={item.avatar[2]} />
-                    </Box>
+                    <Avatar
+                      style={{
+                        border: "calc(0.125rem * var(--mantine-scale)) solid var(--mantine-color-dark-filled)",
+                        background: `url(${item.avatar[2]})`,
+                        backgroundSize: "cover",
+                      }}
+                    >
+                      <Text>+{item.avatar.length - 2}</Text>
+                    </Avatar>
                   )}
-                </Group>
+                </Avatar.Group>
               </Group>
             </Button>
           </Grid.Col>
@@ -93,6 +96,6 @@ export default function WorkspaceHome() {
           </Button>
         </Grid.Col>
       </Grid>
-    </Box>
+    </Container>
   );
 }

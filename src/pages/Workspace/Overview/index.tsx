@@ -1,10 +1,10 @@
-import { ActionIcon, Avatar, Box, Button, Center, CopyButton, Divider, Flex, Grid, Group, HoverCard, Text, Title, Tooltip, rem } from "@mantine/core";
+import { ActionIcon, Avatar, Box, Button, Center, Container, CopyButton, Divider, Flex, Grid, Group, Text, Title, Tooltip, rem } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconAdjustments, IconCheck, IconCircleFilled, IconCopy, IconDeviceDesktopAnalytics, IconPlus, IconUser } from "@tabler/icons-react";
-import { RecordModel } from "pocketbase";
+import { IconAdjustments, IconCheck, IconCircleFilled, IconCopy, IconDeviceDesktopAnalytics, IconPlus } from "@tabler/icons-react";
 import { useEffect } from "preact/hooks";
 import { Link, useLoaderData } from "react-router-dom";
-import { User } from "../../../database/models";
+import UserHoverCard from "../../../components/UserHoverCard";
+import { User, Workspace } from "../../../database/models";
 import { setDocumentTitle } from "../../../utils";
 import Error404 from "../../Error/404";
 import classes from "./index.module.css";
@@ -30,7 +30,7 @@ const data = [
 
 export default function WorkspaceOverview() {
   const isMobile = useMediaQuery(`(max-width: 36em)`);
-  const { workspace } = useLoaderData() as { workspace: RecordModel };
+  const { workspace } = useLoaderData() as { workspace: Workspace };
 
   if (!workspace) return <Error404 />;
 
@@ -39,7 +39,7 @@ export default function WorkspaceOverview() {
   }, [workspace]);
 
   return (
-    <Box>
+    <Container size="xl">
       <Flex justify="space-between">
         <Group w="100%" mr="lg">
           <IconDeviceDesktopAnalytics size={40} />
@@ -49,33 +49,15 @@ export default function WorkspaceOverview() {
           <IconAdjustments size={20} />
         </ActionIcon>
       </Flex>
-      <Group mt="lg">
-        {workspace.avatar.map((avatar: { avatar: string; user: User }, index: number) => (
-          <HoverCard width="max-content" shadow="md" openDelay={250}>
-            <HoverCard.Target>
-              <Avatar src={avatar.avatar} component={Link} to={`/user/${avatar.user.username}`} />
-            </HoverCard.Target>
-            <HoverCard.Dropdown bg="dark">
-              <Box>
-                <Group gap="sm" component={Link} to={`/user/${avatar.user.username}`} style={{ textDecoration: "none" }} w="max-content">
-                  <Avatar src={avatar.avatar} alt={avatar.user.username} radius="xl" size="md" />
-                  <Box>
-                    <Text size="lg" lineClamp={1} c="white">
-                      {avatar.user.username}
-                    </Text>
-                    <Text size="xs" c="gray" lineClamp={1}>
-                      {avatar.user.name}
-                    </Text>
-                  </Box>
-                </Group>
-                <Group mt="md" gap="sm">
-                  <IconUser size={15} />
-                  <Text size="sm">{index == 0 ? "Owner" : "Collaborator"}</Text>
-                </Group>
-              </Box>
-            </HoverCard.Dropdown>
-          </HoverCard>
-        ))}
+      <Group mt="lg" gap="sm">
+        {workspace.users.map((user: User, index: number) => {
+          console.log(user);
+          return (
+            <UserHoverCard profile={user} workspaceOwner={index == 0}>
+              <Avatar src={user.avatar} component={Link} to={`/user/${user.username}`} />
+            </UserHoverCard>
+          );
+        })}
       </Group>
       <Divider my="lg" />
       <Title order={3}>Overview</Title>
@@ -151,6 +133,6 @@ export default function WorkspaceOverview() {
           </Button>
         </Grid.Col>
       </Grid>
-    </Box>
+    </Container>
   );
 }

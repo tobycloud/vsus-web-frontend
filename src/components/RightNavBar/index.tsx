@@ -8,6 +8,7 @@ import {
   IconSettings,
   IconSpeakerphone,
   IconUpload,
+  IconUser,
   IconUsers,
 } from "@tabler/icons-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -48,9 +49,11 @@ export default function RightNavBar({
                   <Text size="lg" lineClamp={1}>
                     {username}
                   </Text>
-                  <Text size="xs" c="gray" lineClamp={1}>
-                    {name}
-                  </Text>
+                  {name != "" && (
+                    <Text size="xs" c="dimmed" lineClamp={1}>
+                      {name}
+                    </Text>
+                  )}
                 </Box>
               </Group>
             </Drawer.Title>
@@ -67,6 +70,14 @@ export default function RightNavBar({
             </Flex>
           </Drawer.Header>
           <Drawer.Body>
+            <NavLink
+              component={Link}
+              to={`/user/${username}`}
+              label="Your profile"
+              leftSection={<IconUser size="1rem" stroke={1.5} />}
+              onClick={() => close()}
+            />
+            <Divider mt={10} mb={10} />
             <NavLink
               component={Link}
               to="/workspace"

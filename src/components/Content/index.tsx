@@ -7,12 +7,12 @@ import { Header } from "../Header";
 import SettingsNavBar from "../SettingsNavBar";
 
 export default function Content() {
-  const isMobile = useMediaQuery("(max-width: 48em)");
-  const navigate = useNavigate();
-
   useEffect(() => {
     if (pocketbase.authStore.model === null) navigate("/auth/signin");
   });
+
+  const isMobile = useMediaQuery("(max-width: 48em)");
+  const navigate = useNavigate();
 
   const inSettings = window.location.pathname.includes("/settings");
 
@@ -40,7 +40,7 @@ export default function Content() {
         </AppShell.Navbar>
 
         <AppShell.Main>
-          <Container mt="xl" pb="xl" size={inSettings ? "md" : "xl"}>
+          <Container mt="xl" pb="xl" size={"100%"} style={{ paddingInline: 0 }}>
             {isMobile && inSettings && (
               <Box>
                 <SettingsNavBar />

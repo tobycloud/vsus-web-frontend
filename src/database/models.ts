@@ -7,6 +7,7 @@ export interface User {
   name: string;
   aboutMe: string;
   avatar: string;
+  banner: string;
   pronouns: string;
   created: string;
   phoneNumber: string;
@@ -17,19 +18,17 @@ export interface User {
   planVisibility: boolean;
   badgesVisibility: boolean;
   badges: string[];
-  followers: User[];
-  rawFollowers: string[];
-  following: User[];
-  rawFollowing: string[];
-  commonFollowing: { [key: string]: User[] };
+  followers: string[];
+  following: string[];
   expanded: boolean;
 } // khai tử these things soon
 
-// export interface Workspace {
-//   id: string;
-//   owner: User;
-//   collaborators: User[];
-//   name: string;
-//   created: string;
-//   updated: string;
-// }
+export interface Workspace {
+  id: string;
+  owner: User;
+  collaborators: User[];
+  users: User[];
+  name: string;
+  created: string;
+  updated: string;
+}

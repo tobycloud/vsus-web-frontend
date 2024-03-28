@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function Error404() {
   return (
-    <Container>
+    <Container mt="xl">
       <Center>
         <Flex direction="column" align="center">
           <Text fw={700} style={{ fontSize: "125px" }}>

@@ -96,7 +96,7 @@ export default function SignUp() {
           id="password2"
           {...form.getInputProps("password2")}
         />
-        <Text size="xs" mt="xs" c="gray">
+        <Text size="xs" mt="xs" c="dimmed">
           Password must be at least 8 characters long
         </Text>
         <Button variant="light" color="vsus-button" mt="lg" w="100%" type="submit">

@@ -1,4 +1,4 @@
-import { Alert, Avatar, Box, Button, Center, Flex, NativeSelect, Text, Title } from "@mantine/core";
+import { Alert, Avatar, Button, Center, Container, Flex, NativeSelect, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
@@ -36,7 +36,7 @@ const SettingsPreferences = () => {
   );
 
   return (
-    <Box>
+    <Container>
       <Title order={2}>Preferences</Title>
       {preferencesUpdated && (
         <Alert variant="light" mt="md" color="green" title="Success!" icon={<IconInfoCircle />}>
@@ -141,7 +141,7 @@ const SettingsPreferences = () => {
           </Center>
         }
       /> */}
-    </Box>
+    </Container>
   );
 };
 

@@ -26,12 +26,22 @@ export async function userSignUp(data: Object) {
   await pocketbase.collection("users").create(data);
 }
 
-export function getUser(id: string) {
+export async function getUser(id: string) {
   return pocketbase.collection("users").getOne(id, { requestKey: null });
+}
+
+export async function getUserFromUsername(username: string) {
+  return pocketbase.collection("users").getFullList({
+    filter: `username = "${username}"`,
+  });
 }
 
 export function getAvatar(user: RecordModel | User) {
   return pocketbase.getFileUrl(user, user.avatar);
+}
+
+export function getBanner(user: RecordModel | User) {
+  return pocketbase.getFileUrl(user, user.banner);
 }
 
 export async function getUserWorkspaces(user: User) {

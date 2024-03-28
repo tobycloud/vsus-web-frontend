@@ -1,11 +1,11 @@
 import { Box, Button, PasswordInput, Text } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
 import { IconKey, IconReload } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
-import classes from "../../index.module.css";
-import AuthLayout from "../../Layout";
 import { useEffect } from "preact/hooks";
+import { Link } from "react-router-dom";
 import { setDocumentTitle } from "../../../../utils";
+import AuthLayout from "../../Layout";
+import classes from "../../index.module.css";
 
 export default function ResetPassword() {
   const form = useForm({
@@ -45,7 +45,7 @@ export default function ResetPassword() {
           id="password2"
           {...form.getInputProps("password2")}
         />
-        <Text size="xs" mt="xs" c="gray">
+        <Text size="xs" mt="xs" c="dimmed">
           Password must be at least 8 characters long
         </Text>
         <Button variant="light" color="vsus-button" mt="lg" w="100%" type="submit">
