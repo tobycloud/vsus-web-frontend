@@ -1,13 +1,16 @@
 import { Box, Button, Input, Text } from "@mantine/core";
 import { isEmail, useForm } from "@mantine/form";
 import { IconAt } from "@tabler/icons-react";
+import { useEffect, useState } from "preact/hooks";
 import { Link } from "react-router-dom";
-import classes from "../index.module.css";
-import AuthLayout from "../Layout";
-import { useEffect } from "preact/hooks";
+import pocketbase from "../../../database";
 import { setDocumentTitle } from "../../../utils";
+import AuthLayout from "../Layout";
+import classes from "../index.module.css";
 
 export default function ForgotPassword() {
+  const [gettingCode, setGettingCode] = useState(false);
+
   const form = useForm({
     initialValues: {
       email: "",
@@ -23,7 +26,21 @@ export default function ForgotPassword() {
 
   return (
     <AuthLayout title="Reset your password">
-      <Box component="form" className={classes.inputBox} onSubmit={form.onSubmit(async () => {})}>
+      <Box
+        component="form"
+        className={classes.inputBox}
+        onSubmit={form.onSubmit(async ({ email }) => {
+          setGettingCode(true);
+
+          try {
+            await pocketbase.collection("users").requestPasswordReset(email.trim());
+          } catch (error) {
+            console.error(error);
+          }
+
+          setGettingCode(false);
+        })}
+      >
         <Input
           variant="filled"
           required
@@ -33,7 +50,7 @@ export default function ForgotPassword() {
           id="email"
           {...form.getInputProps("email")}
         />
-        <Button variant="light" color="vsus-button" mt="lg" w="100%" type="submit">
+        <Button variant="light" color="vsus-button" mt="lg" w="100%" type="submit" disabled={gettingCode || !form.values.email.trim()}>
           Get reset code
         </Button>
       </Box>
