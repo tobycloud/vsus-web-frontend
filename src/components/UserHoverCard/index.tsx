@@ -2,11 +2,19 @@ import { Anchor, Avatar, Box, Button, Divider, Group, HoverCard, Text } from "@m
 import { IconDeviceDesktopAnalytics, IconMail, IconPhone, IconUsersGroup } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import pocketbase from "../../database";
-import { User } from "../../database/models";
+import { PBUser } from "../../database/models";
 import classes from "./index.module.css";
 
-export default function UserHoverCard({ profile, children, workspaceOwner }: { profile: User; children: React.ReactNode; workspaceOwner?: boolean }) {
-  const user = pocketbase.authStore.model as User;
+export default function UserHoverCard({
+  profile,
+  children,
+  workspaceOwner,
+}: {
+  profile: PBUser;
+  children: React.ReactNode;
+  workspaceOwner?: boolean;
+}) {
+  const user = pocketbase.authStore.model as PBUser;
 
   return (
     <HoverCard width="max-content" shadow="md" openDelay={250} withArrow>

@@ -24,14 +24,14 @@ import { useNavigate } from "react-router-dom";
 import { useFilePicker } from "use-file-picker";
 import { FileAmountLimitValidator, FileSizeValidator, FileTypeValidator } from "use-file-picker/validators";
 import BackButton from "../../../../components/BackButton";
-import pocketbase, { getAvatar, getBanner } from "../../../../database";
-import { User } from "../../../../database/models";
+import pocketbase from "../../../../database";
+import { PBUser } from "../../../../database/models";
 import { base64toFile } from "../../../../utils";
 
 const SettingsPreferencesEditProfile = () => {
   const isMobile = useMediaQuery(`(max-width: 36em)`);
 
-  const user = pocketbase.authStore.model as User;
+  const user = pocketbase.authStore.model as PBUser;
 
   const fromProfile = new URLSearchParams(window.location.search).get("fromProfile");
 
@@ -53,16 +53,9 @@ const SettingsPreferencesEditProfile = () => {
 
   const [errorWhileUpdating, setErrorWhileUpdating] = useState<string>("");
 
-  const [avatar, setAvatar] = useState<string | null>(null);
+  const [avatar, setAvatar] = useState<string>(pocketbase.getFileUrl(user, user.avatar));
 
-  const [banner, setBanner] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!user) return;
-
-    setAvatar(getAvatar(user));
-    setBanner(getBanner(user));
-  }, []);
+  const [banner, setBanner] = useState<string>(pocketbase.getFileUrl(user, user.banner));
 
   const {
     openFilePicker: openAvatarFilePicker,
@@ -127,8 +120,8 @@ const SettingsPreferencesEditProfile = () => {
     bannerFilesContent.length = 0;
     bannerErrors.length = 0;
     if (!user) return;
-    setAvatar(getAvatar(user));
-    setBanner(getBanner(user));
+    setAvatar(pocketbase.getFileUrl(user, user.avatar));
+    setBanner(pocketbase.getFileUrl(user, user.banner));
   };
 
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -156,7 +149,7 @@ const SettingsPreferencesEditProfile = () => {
             <Menu.Item
               leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
               onClick={() => {
-                setAvatar(null);
+                setAvatar("");
               }}
             >
               Remove photo
@@ -200,7 +193,7 @@ const SettingsPreferencesEditProfile = () => {
             <Menu.Item
               leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
               onClick={() => {
-                setBanner(null);
+                setBanner("");
               }}
             >
               Remove photo

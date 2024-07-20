@@ -1,29 +1,25 @@
 import { Box, Divider, Drawer, Flex, Group, NavLink, Text } from "@mantine/core";
 import { IconDeviceDesktopAnalytics, IconHome, IconSearch } from "@tabler/icons-react";
-import { RecordModel } from "pocketbase";
-import { useEffect, useState } from "preact/hooks";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import pocketbase, { getLimitWorkspaces } from "../../database";
-import { User } from "../../database/models";
+import pocketbase, { getUserWorkspaces } from "../../database";
+import { PBUser } from "../../database/models";
 import Logo from "../Logo";
 
 export default function LeftNavBar({ opened, close }: { opened: boolean; close: () => void }) {
-  const [workspaces, setWorkspaces] = useState<RecordModel[]>([]);
-  const user = pocketbase.authStore.model as User;
+  const user = pocketbase.authStore.model as PBUser;
 
-  const fetchWorkspaces = async () => {
-    setWorkspaces(await getLimitWorkspaces(user, 0, 5));
-  };
+  const workspacesQuery = useQuery({
+    queryKey: ["workspaces", user],
+    queryFn: () => getUserWorkspaces(user, { sort: "-updated", perPage: 5 }),
+  });
 
-  useEffect(() => {
-    fetchWorkspaces();
-  }, []);
-
-  useEffect(() => {
-    const location = window.location.pathname.split("/");
-    if (location[1] !== "workspace") return;
-    if (!workspaces.map((workspace) => workspace.id).includes(location[2])) fetchWorkspaces();
-  }, [window.location.pathname]); // handle workspace addition
+  // useEffect(() => {
+  //   const location = window.location.pathname.split("/");
+  //   if (location[1] !== "workspace") return;
+  //   if (!workspaces.map((workspace) => workspace.id).includes(location[2])) fetchWorkspaces();
+  // }, [window.location.pathname]); // handle workspace addition
+  // prob no need with react-query now
 
   return (
     <>
@@ -48,7 +44,7 @@ export default function LeftNavBar({ opened, close }: { opened: boolean; close: 
                 <IconSearch size={16} style={{ color: "var(--mantine-color-dimmed)" }} />
               </Flex>
               <Flex direction="column">
-                {workspaces.map((workspace) => (
+                {(workspacesQuery.data?.items ?? []).map((workspace) => (
                   <NavLink
                     key={workspace.id}
                     leftSection={<IconDeviceDesktopAnalytics size={20} />}
@@ -58,7 +54,7 @@ export default function LeftNavBar({ opened, close }: { opened: boolean; close: 
                     onClick={() => close()}
                   />
                 ))}
-                {workspaces.length === 0 && (
+                {workspacesQuery.data?.items.length === 0 && (
                   <Text size="sm" style={{ padding: "calc(0.5rem* var(--mantine-scale)) var(--mantine-spacing-sm)" }}>
                     No workspaces
                   </Text>

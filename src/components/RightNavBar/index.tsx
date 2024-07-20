@@ -13,27 +13,15 @@ import {
 } from "@tabler/icons-react";
 import { Link, useNavigate } from "react-router-dom";
 import pocketbase from "../../database";
-import { User } from "../../database/models";
+import { PBUser } from "../../database/models";
 import CreateInstanceModal from "../CreateInstanceModal";
 import CreateNewDropdown from "../CreateNewDropdown";
 import CreateWorkspaceModal from "../CreateWorkspaceModal";
 
-export default function RightNavBar({
-  opened,
-  close,
-  username,
-  name,
-  avatar,
-}: {
-  opened: boolean;
-  close: () => void;
-  username: string;
-  name: string;
-  avatar: string | null;
-}) {
+export default function RightNavBar({ opened, close }: { opened: boolean; close: () => void }) {
   const [signOutModalOpened, { open: openSignOutModal, close: closeSignOutModal }] = useDisclosure(false);
   const navigate = useNavigate();
-  const user = pocketbase.authStore.model as User;
+  const user = pocketbase.authStore.model as PBUser;
   const createWorkspace = CreateWorkspaceModal({ user });
   const createInstance = CreateInstanceModal({ user });
 
@@ -47,14 +35,14 @@ export default function RightNavBar({
           <Drawer.Header>
             <Drawer.Title>
               <Group gap="sm">
-                <Avatar src={avatar} alt={name} radius="xl" size="md" />
+                <Avatar src={pocketbase.getFileUrl(user, user.avatar)} alt={user.name} radius="xl" size="md" />
                 <Box>
                   <Text size="lg" lineClamp={1}>
-                    {username}
+                    {user.username}
                   </Text>
-                  {name != "" && (
+                  {user.name != "" && (
                     <Text size="xs" c="dimmed" lineClamp={1}>
-                      {name}
+                      {user.name}
                     </Text>
                   )}
                 </Box>
@@ -79,7 +67,7 @@ export default function RightNavBar({
           <Drawer.Body>
             <NavLink
               component={Link}
-              to={`/user/${username}`}
+              to={`/user/${user.username}`}
               label="Your profile"
               leftSection={<IconUser size="1rem" stroke={1.5} />}
               onClick={() => close()}

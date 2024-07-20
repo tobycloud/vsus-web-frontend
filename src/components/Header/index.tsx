@@ -3,10 +3,10 @@ import { ActionIcon, Avatar, Box, Code, Flex, Group, Indicator, Text, Tooltip, U
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { spotlight } from "@mantine/spotlight";
 import { IconInbox, IconMenu2, IconSearch } from "@tabler/icons-react";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 import { Link, useNavigate } from "react-router-dom";
-import pocketbase, { getAvatar } from "../../database";
-import { User } from "../../database/models";
+import pocketbase from "../../database";
+import { PBUser } from "../../database/models";
 import { borderLine } from "../../utils";
 import CreateInstanceModal from "../CreateInstanceModal";
 import CreateNewDropdown from "../CreateNewDropdown";
@@ -18,8 +18,7 @@ import SearchMenu from "../SearchMenu";
 import classes from "./index.module.css";
 
 export function Header() {
-  const user = pocketbase.authStore.model as User;
-  if (!user) return null;
+  const user = pocketbase.authStore.model as PBUser;
 
   const isMobile = useMediaQuery("(max-width: 62em)");
 
@@ -29,7 +28,7 @@ export function Header() {
 
   const [openedLeft, { open: openLeft, close: closeLeft }] = useDisclosure(false);
 
-  const [avatar, setAvatar] = useState<string | null>(null);
+  if (!user) return null;
 
   const createWorkspace = CreateWorkspaceModal({ user });
 
@@ -46,11 +45,6 @@ export function Header() {
         navigate("/auth/signin");
       });
   }, []);
-
-  useEffect(() => {
-    if (!user) return;
-    setAvatar(getAvatar(user));
-  }, [user]);
 
   return (
     <>
@@ -92,13 +86,13 @@ export function Header() {
                 </ActionIcon>
               </Tooltip>
             </Indicator>
-            <Avatar src={avatar} onClick={openRight} />
+            <Avatar src={pocketbase.getFileUrl(user, user.avatar)} onClick={openRight} />
           </Group>
         </Flex>
       </header>
       <SearchMenu />
       <LeftNavBar opened={openedLeft} close={closeLeft} />
-      <RightNavBar opened={openedRight} close={closeRight} username={user?.username} name={user?.name} avatar={avatar} />
+      <RightNavBar opened={openedRight} close={closeRight} />
     </>
   );
 }

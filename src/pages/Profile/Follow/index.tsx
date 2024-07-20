@@ -1,23 +1,29 @@
+// @ts-nocheck
+
 import { Avatar, Box, Button, Divider, Flex, Grid, Group, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconBuilding, IconMapPin } from "@tabler/icons-react";
-import { useEffect, useState } from "preact/hooks";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "preact/hooks";
 import { Link } from "react-router-dom";
 import UserHoverCard from "../../../components/UserHoverCard";
 import pocketbase, { getAvatar, getUser } from "../../../database";
-import { User } from "../../../database/models";
+import { PBUser, User } from "../../../database/models";
 import Loading from "../../Loading";
 
 export default function ProfileFollow({ followers, following }: { followers?: string[]; following?: string[] }) {
-  const user = pocketbase.authStore.model as User;
+  const user = pocketbase.authStore.model as PBUser;
 
   const isVertical = useMediaQuery(`(max-width: 62em)`);
 
   if (!followers && !following) return <Loading />;
 
-  const people = followers ?? following ?? [];
+  const peopleIds: string[] = followers ?? following ?? [];
 
-  const [peopleUsers, setPeopleUsers] = useState<User[]>([]);
+  const peopleQuery = useQuery({
+    queryKey: [followers?.length > 0 ? "followers" : "following", ""],
+    queryFn: () => Promise.all(peopleIds.map((id) => getUser(id))),
+  });
 
   useEffect(() => {
     const fetchPeople = async () => {

@@ -2,11 +2,12 @@ import { MantineProvider } from "@mantine/core";
 import { RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./app.css";
 
-import { getAvatar, getBanner, getInstance, getUser, getUserFromUsername, getWorkspace } from "./database";
+import { getInstance, getUserByUsername, getWorkspace } from "./database";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Content from "./components/Content";
 import AuthContent from "./components/Content/Auth";
-import { User } from "./database/models";
+import { PBInstance, PBUser, PBWorkspace } from "./database/models";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import EnterResetPasswordCode from "./pages/Auth/ForgotPassword/EnterCode";
 import ResetPassword from "./pages/Auth/ForgotPassword/ResetPassword";
@@ -27,6 +28,14 @@ import SettingsPreferences from "./pages/Settings/Preferences";
 import SettingsPreferencesEditProfile from "./pages/Settings/Preferences/EditProfile";
 import WorkspaceHome from "./pages/Workspace";
 import WorkspaceOverview from "./pages/Workspace/Overview";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const routes: RouteObject[] = [
   {
@@ -80,78 +89,47 @@ const routes: RouteObject[] = [
       {
         path: "/workspace/:workspaceId",
         element: <WorkspaceOverview />,
-        loader: async ({ params }) => {
+        loader: async ({ params }): Promise<PBWorkspace | undefined> => {
           const { workspaceId } = params;
           // Load workspace data
 
-          if (!workspaceId) return { workspace: null };
+          if (!workspaceId) return;
 
           try {
-            const workspace = await getWorkspace(workspaceId);
-            const ownerUser = (await getUser(workspace.owner)) as unknown as User;
-            ownerUser.avatar = await getAvatar(ownerUser);
-            const collaboratorsUsers = (await Promise.all(
-              workspace.collaborators.map(async (collaborator: string) => {
-                const collaboratorUser = await getUser(collaborator);
-                collaboratorUser.avatar = await getAvatar(collaboratorUser);
-                return collaboratorUser;
-              })
-            )) as User[];
-            workspace.users = [ownerUser, ...collaboratorsUsers];
-            const instances = await Promise.all(
-              workspace.instances.map(async (instanceId: string) => {
-                const instance = await getInstance(instanceId);
-                instance.owner = await getUser(instance.owner);
-                return instance;
-              })
-            );
-            workspace.instances = instances;
-            return { workspace: workspace };
+            return await queryClient.fetchQuery({ queryKey: ["workspace", workspaceId], queryFn: () => getWorkspace(workspaceId) });
           } catch (error) {
-            return { workspace: null };
-          }
-        },
-      },
-      {
-        path: "/instance/:instanceId",
-        element: <Instance />,
-        loader: async ({ params }) => {
-          const { instanceId } = params;
-          if (!instanceId) return { instance: null };
-
-          try {
-            const instance = await getInstance(instanceId);
-            const ownerUser = (await getUser(instance.owner)) as unknown as User;
-            ownerUser.avatar = await getAvatar(ownerUser);
-            instance.owner = ownerUser;
-            const workspace = await getWorkspace(instance.workspace);
-            instance.workspace_name = workspace.name;
-            return { instance: instance };
-          } catch (error) {
-            return { instance: null };
+            return;
           }
         },
       },
       {
         path: "/user/:username",
         element: <Profile />,
-        loader: async ({ params }) => {
+        loader: async ({ params }): Promise<PBUser | undefined> => {
           const { username } = params;
-          if (!username) return { profile: null };
+          if (!username) return;
 
           try {
-            const userList = await getUserFromUsername(username);
-            if (userList.length === 0) return { profile: null };
-            const user = userList[0];
-            user.avatar = (await getAvatar(user)) || "";
-            user.banner = (await getBanner(user)) || "";
-            return { profile: user };
+            return queryClient.fetchQuery({ queryKey: ["user", username], queryFn: () => getUserByUsername(username) });
           } catch (error) {
-            return { profile: null };
+            return;
           }
         },
       },
+      {
+        path: "/instance/:id",
+        element: <Instance />,
+        loader: async ({ params }): Promise<PBInstance | undefined> => {
+          const { id } = params;
+          if (!id) return;
 
+          try {
+            return queryClient.fetchQuery({ queryKey: ["instance", id], queryFn: () => getInstance(id) });
+          } catch (error) {
+            return;
+          }
+        },
+      },
       {
         path: "*",
         element: <Error404 />,
@@ -191,24 +169,26 @@ const router = createBrowserRouter(routes);
 
 export default function App() {
   return (
-    <MantineProvider
-      defaultColorScheme="dark"
-      theme={{
-        colors: {
-          dark: ["#ffffff", "#e6e7e7", "#b3b8b8", "#99a0a0", "#4c5d61", "#1a3e42", "#1a3e42", "#00292d", "#1a292a", "#001112"],
-          primary: ["#ffffff", "#e6eaea", "#b3bfc0", "#99a9ab", "#809496", "#667f81", "#4d696c", "#335457", "#1a3e42", "#00292d"],
-          "vsus-natural": ["#E6FEFF", "#E6FEFF", "#E6FEFF", "#00A9BD", "#00A9BD", "#00A9BD", "#00292D", "#00292D", "#00292D", "#00292D"],
-          "vsus-button": ["#f0f9fa", "#e3f0f1", "#c0e2e3", "#9bd3d5", "#7dc5c8", "#6abdc1", "#5fbabe", "#4ea3a7", "#419195", "#2c7e82"],
-          "vsus-text": ["#ebfeff", "#d8fbfd", "#aaf8fc", "#7df5fb", "#62f2fb", "#56f1fb", "#4ef1fb", "#40d6e0", "#2fbfc7", "#00a5ad"],
-        },
-        primaryColor: "primary",
-        fontFamily: "Inter, sans-serif",
-        headings: {
+    <QueryClientProvider client={queryClient}>
+      <MantineProvider
+        defaultColorScheme="dark"
+        theme={{
+          colors: {
+            dark: ["#ffffff", "#e6e7e7", "#b3b8b8", "#99a0a0", "#4c5d61", "#1a3e42", "#1a3e42", "#00292d", "#1a292a", "#001112"],
+            primary: ["#ffffff", "#e6eaea", "#b3bfc0", "#99a9ab", "#809496", "#667f81", "#4d696c", "#335457", "#1a3e42", "#00292d"],
+            "vsus-natural": ["#E6FEFF", "#E6FEFF", "#E6FEFF", "#00A9BD", "#00A9BD", "#00A9BD", "#00292D", "#00292D", "#00292D", "#00292D"],
+            "vsus-button": ["#f0f9fa", "#e3f0f1", "#c0e2e3", "#9bd3d5", "#7dc5c8", "#6abdc1", "#5fbabe", "#4ea3a7", "#419195", "#2c7e82"],
+            "vsus-text": ["#ebfeff", "#d8fbfd", "#aaf8fc", "#7df5fb", "#62f2fb", "#56f1fb", "#4ef1fb", "#40d6e0", "#2fbfc7", "#00a5ad"],
+          },
+          primaryColor: "primary",
           fontFamily: "Inter, sans-serif",
-        },
-      }}
-    >
-      <RouterProvider router={router} />
-    </MantineProvider>
+          headings: {
+            fontFamily: "Inter, sans-serif",
+          },
+        }}
+      >
+        <RouterProvider router={router} />
+      </MantineProvider>
+    </QueryClientProvider>
   );
 }

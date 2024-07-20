@@ -1,38 +1,30 @@
 import { Avatar, Box, Button, Center, Container, Divider, Grid, Group, Text, Title } from "@mantine/core";
 import { IconDeviceDesktopAnalytics, IconPlus } from "@tabler/icons-react";
-import { RecordModel } from "pocketbase";
-import { useEffect, useState } from "preact/hooks";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "preact/hooks";
 import { Link } from "react-router-dom";
 import CreateWorkspaceModal from "../../components/CreateWorkspaceModal";
-import pocketbase, { getAvatar, getLimitWorkspaces, getUser } from "../../database";
-import { User } from "../../database/models";
+import pocketbase, { getUserWorkspaces } from "../../database";
+import { PBUser } from "../../database/models";
 import { setDocumentTitle } from "../../utils";
 import Loading from "../Loading";
 import classes from "./index.module.css";
 
 export default function WorkspaceHome() {
-  const user = pocketbase.authStore.model as User;
+  const user = pocketbase.authStore.model as PBUser;
 
-  const [workspaces, setWorkspaces] = useState<RecordModel[]>([]);
+  const workspacesQuery = useQuery({
+    queryKey: ["workspaces", user],
+    queryFn: () => getUserWorkspaces(user, { sort: "-updated", perPage: 5 }),
+  });
 
   useEffect(() => {
-    const fetchWorkspaces = async () => {
-      const workspaces = await getLimitWorkspaces(user, 0, 5);
-      for (const workspace of workspaces) {
-        const ownerAvatar = await getAvatar(await getUser(workspace.owner));
-        const collaboratorsAvatars = await Promise.all(
-          workspace.collaborators.map(async (collaborator: string) => await getAvatar(await getUser(collaborator)))
-        );
-        workspace.avatar = [ownerAvatar, ...collaboratorsAvatars];
-      }
-      setWorkspaces(workspaces);
-    };
-
-    fetchWorkspaces();
     setDocumentTitle("Your workspaces");
   }, []);
 
-  if (workspaces.length === 0) return <Loading />;
+  if (!workspacesQuery.isFetched) return <Loading />;
+
+  const workspaces = workspacesQuery.data!.items;
 
   const createWorkspace = CreateWorkspaceModal({ user });
 
@@ -42,7 +34,7 @@ export default function WorkspaceHome() {
       <Title order={2}>Your workspaces</Title>
       <Divider my="lg" />
       <Grid mt="md" mb="xl">
-        {workspaces.map((item: RecordModel) => (
+        {workspaces.map((item) => (
           <Grid.Col span={{ base: 12, md: 6 }}>
             <Button
               p="lg"

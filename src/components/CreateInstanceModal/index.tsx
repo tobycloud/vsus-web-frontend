@@ -2,13 +2,13 @@ import { Alert, Box, Button, Combobox, Input, InputBase, Modal, TextInput, useCo
 import { hasLength, isNotEmpty, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconInfoCircle } from "@tabler/icons-react";
-import { RecordModel } from "pocketbase";
-import { useEffect, useState } from "preact/hooks";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "preact/hooks";
 import { useNavigate } from "react-router-dom";
-import pocketbase, { createInstance, getLimitWorkspaces } from "../../database";
-import { User } from "../../database/models";
+import pocketbase, { addInstanceToWorkspace, createInstance, getUserWorkspaces } from "../../database";
+import { PBUser, PBWorkspace } from "../../database/models";
 
-export default function CreateInstanceModal({ user, workspaceId }: { user: User; workspaceId?: string }): {
+export default function CreateInstanceModal({ user, workspace }: { user: PBUser; workspace?: PBWorkspace }): {
   element: JSX.Element;
   state: boolean;
   close: () => void;
@@ -17,12 +17,24 @@ export default function CreateInstanceModal({ user, workspaceId }: { user: User;
 } {
   const [opened, controls] = useDisclosure(false);
 
-  const form = useForm({
+  const queryClient = useQueryClient();
+
+  const workspaces = useQuery({
+    queryKey: ["workspaces", user],
+    queryFn: () => getUserWorkspaces(user),
+  });
+
+  const form = useForm<{
+    workspace?: PBWorkspace;
+    name: string;
+  }>({
     initialValues: {
+      workspace,
       name: "",
     },
 
     validate: {
+      workspace: isNotEmpty("Workspace is required"),
       name: isNotEmpty("Instance name is required") && hasLength({ min: 1, max: 25 }, "Name must be 1-25 characters long"),
     },
   });
@@ -35,18 +47,6 @@ export default function CreateInstanceModal({ user, workspaceId }: { user: User;
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
-  const [value, setValue] = useState<string | null>(null);
-
-  const [workspaces, setWorkspaces] = useState<RecordModel[]>([]);
-
-  useEffect(() => {
-    opened &&
-      (async () => {
-        const workspaces = await getLimitWorkspaces(user, 1, 10);
-        setWorkspaces(workspaces);
-      })();
-  }, [opened]);
-
   return {
     element: (
       <Modal
@@ -54,7 +54,6 @@ export default function CreateInstanceModal({ user, workspaceId }: { user: User;
         onClose={() => {
           controls.close();
           form.reset();
-          workspaces.length = 0;
         }}
         title="Create a new Instance"
         centered
@@ -65,20 +64,18 @@ export default function CreateInstanceModal({ user, workspaceId }: { user: User;
           component="form"
           onSubmit={form.onSubmit(async () => {
             try {
-              const wId = workspaceId ?? workspaces.find((item) => item.name === value)?.id;
-              if (!wId) {
-                setError(true);
-                return;
-              }
-              console.log(wId);
-              const instance = await createInstance(user, form.values.name, wId);
-              if (!instance) {
-                setError(true);
-                return;
-              }
+              const instance = await createInstance(user, form.values.name, form.values.workspace!.id);
+              if (!instance) return setError(true);
+
+              addInstanceToWorkspace(form.values.workspace!, instance);
+
               setError(false);
+              queryClient.invalidateQueries({ queryKey: ["instances", user] });
+              queryClient.invalidateQueries({ queryKey: ["workspace", form.values.workspace!.id] });
+
               pocketbase.collection("users").authRefresh();
               navigate(`/instance/${instance.id}`);
+
               controls.close();
               form.reset();
             } catch (error) {
@@ -92,11 +89,15 @@ export default function CreateInstanceModal({ user, workspaceId }: { user: User;
             </Alert>
           )}
           <TextInput {...form.getInputProps("name")} placeholder="Instance name" mb="md" />
-          {!workspaceId && (
+          {!workspace && (
             <Combobox
               store={combobox}
-              onOptionSubmit={(val) => {
-                setValue(val);
+              onOptionSubmit={(id) => {
+                const workspace = workspaces.data?.items.find((item) => item.id === id);
+                if (!workspace) return;
+
+                form.setFieldValue("workspace", workspace);
+
                 combobox.closeDropdown();
               }}
             >
@@ -110,15 +111,15 @@ export default function CreateInstanceModal({ user, workspaceId }: { user: User;
                   rightSectionPointerEvents="none"
                   onClick={() => combobox.toggleDropdown()}
                 >
-                  {value || <Input.Placeholder>Workspace name</Input.Placeholder>}
+                  {form.values.workspace || <Input.Placeholder>Workspace</Input.Placeholder>}
                 </InputBase>
               </Combobox.Target>
 
               <Combobox.Dropdown>
                 <Combobox.Options>
                   {workspaces ? (
-                    workspaces.map((item) => (
-                      <Combobox.Option value={item.name} key={item.id}>
+                    (workspaces.data?.items ?? []).map((item) => (
+                      <Combobox.Option value={item.id} key={item.id}>
                         {item.name}
                       </Combobox.Option>
                     ))

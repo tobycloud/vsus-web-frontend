@@ -1,7 +1,6 @@
 {
   "name": "vsus-frontend",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -10,10 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tabler/icons-react": "^3.1.0",
     "@mantine/core": "^7.6.2",
     "@mantine/form": "^7.6.2",
     "@mantine/hooks": "^7.6.2",
     "@mantine/spotlight": "^7.6.2",
+    "@tanstack/react-query": "^5.51.9",
+    "pocketbase": "^0.21.1",
     "preact": "^10.19.7",
     "react-country-flag": "^3.1.0",
     "react-router-dom": "^6.22.3",
@@ -21,13 +23,11 @@
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.8.2",
-    "@tabler/icons-react": "^3.1.0",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@typescript-eslint/parser": "^7.3.1",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "pocketbase": "^0.21.1",
     "postcss": "^8.4.37",
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",

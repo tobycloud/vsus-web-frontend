@@ -5,9 +5,9 @@ import { IconInfoCircle } from "@tabler/icons-react";
 import { useState } from "preact/hooks";
 import { useNavigate } from "react-router-dom";
 import pocketbase, { createWorkspace } from "../../database";
-import { User } from "../../database/models";
+import { PBUser } from "../../database/models";
 
-export default function CreateWorkspaceModal({ user }: { user: User }): {
+export default function CreateWorkspaceModal({ user }: { user: PBUser }): {
   element: JSX.Element;
   state: boolean;
   close: () => void;
@@ -47,14 +47,15 @@ export default function CreateWorkspaceModal({ user }: { user: User }): {
           component="form"
           onSubmit={form.onSubmit(async () => {
             try {
+              // need to do cache invalidation here
+
               const workspace = await createWorkspace(user, form.values.name);
-              if (!workspace) {
-                setError(true);
-                return;
-              }
+              if (!workspace) return setError(true);
+
               setError(false);
               pocketbase.collection("users").authRefresh();
               navigate(`/workspace/${workspace.id}`);
+
               controls.close();
               form.reset();
             } catch (error) {

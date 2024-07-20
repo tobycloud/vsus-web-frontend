@@ -1,22 +1,22 @@
-import { Anchor, Avatar, Blockquote, Box, Button, Divider, Flex, Grid, Group, Image, Text, Title } from "@mantine/core";
+import { Anchor, Avatar, Box, Button, Divider, Flex, Grid, Group, Image, Text, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconInfoCircle, IconMail, IconPhone, IconUsersGroup } from "@tabler/icons-react";
+import { IconMail, IconPhone, IconUsersGroup } from "@tabler/icons-react";
 import { useEffect, useState } from "preact/hooks";
 import { Link, useLoaderData } from "react-router-dom";
 import pocketbase from "../../database";
-import { User } from "../../database/models";
+import { PBUser } from "../../database/models";
 import { setDocumentTitle } from "../../utils";
 import Error404 from "../Error/404";
-import ProfileFollow from "./Follow";
 import classes from "./index.module.css";
 
 export default function Profile() {
   const isMobile = useMediaQuery(`(max-width: 36em)`);
-  const { profile } = useLoaderData() as { profile: User };
-  const user = pocketbase.authStore.model as User;
+  const profile = useLoaderData() as PBUser | undefined;
+  const user = pocketbase.authStore.model as PBUser;
 
   if (!profile) return <Error404 />;
 
+  // @ts-ignore add follow tabs back later
   const [currentTab, setCurrentTab] = useState(new URLSearchParams(location.search).get("tab"));
 
   useEffect(() => {
@@ -138,7 +138,7 @@ export default function Profile() {
             </Box>
           </Flex>
         </Grid.Col>
-        <Grid.Col span={{ base: 12, md: 7.5, lg: 8 }} mt={{ md: "lg" }}>
+        {/* <Grid.Col span={{ base: 12, md: 7.5, lg: 8 }} mt={{ md: "lg" }}>
           {(() => {
             switch (currentTab) {
               case "followers":
@@ -169,7 +169,7 @@ export default function Profile() {
                 );
             }
           })()}
-        </Grid.Col>
+        </Grid.Col> */}
       </Grid>
     </Box>
   );

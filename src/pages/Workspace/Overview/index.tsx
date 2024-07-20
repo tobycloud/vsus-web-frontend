@@ -1,49 +1,37 @@
-import { ActionIcon, Avatar, Box, Button, Center, Container, CopyButton, Divider, Flex, Grid, Group, Text, Title, Tooltip, rem } from "@mantine/core";
+import { ActionIcon, Avatar, Box, Button, Center, Container, Divider, Flex, Grid, Group, Text, Title, Tooltip, rem } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconAdjustments, IconCheck, IconCircleFilled, IconCopy, IconDeviceDesktopAnalytics, IconPlus, IconUserCode } from "@tabler/icons-react";
+import { IconAdjustments, IconCircleFilled, IconDeviceDesktopAnalytics, IconPlus, IconUserCode } from "@tabler/icons-react";
 import { useEffect } from "preact/hooks";
 import { Link, useLoaderData } from "react-router-dom";
 import CreateInstanceModal from "../../../components/CreateInstanceModal";
 import UserHoverCard from "../../../components/UserHoverCard";
 import pocketbase from "../../../database";
-import { User, Workspace } from "../../../database/models";
+import { PBUser, PBWorkspace } from "../../../database/models";
 import { setDocumentTitle } from "../../../utils";
 import Error404 from "../../Error/404";
 import classes from "./index.module.css";
 
-const data = [
-  {
-    title: "Instances",
-    number: 5,
-  },
-  {
-    title: "Blocks",
-    number: 4,
-  },
-  {
-    title: "Deployments",
-    number: 5,
-  },
-  {
-    title: "CI/CD Jobs",
-    number: 2,
-  },
-];
-
 export default function WorkspaceOverview() {
   const isMobile = useMediaQuery(`(max-width: 36em)`);
-  const { workspace } = useLoaderData() as { workspace: Workspace };
+  const workspace = useLoaderData() as PBWorkspace;
 
-  const user = pocketbase.authStore.model as User;
+  const user = pocketbase.authStore.model as PBUser;
 
   if (!workspace) return <Error404 />;
+
+  const data: Record<string, any> = {
+    Instances: workspace.instances.length,
+    Blocks: 0,
+    Deployments: 0,
+    "CI/CD Jobs": 0,
+  };
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     setDocumentTitle(`${workspace.name} | Workspace`);
   }, [workspace]);
 
-  const createInstance = CreateInstanceModal({ user, workspaceId: workspace.id });
+  const createInstance = CreateInstanceModal({ user, workspace });
 
   return (
     <>
@@ -60,22 +48,20 @@ export default function WorkspaceOverview() {
         </Flex>
         <Group mt="lg" gap="xs">
           <IconUserCode size={25} style={{ color: "var(--mantine-color-dimmed)" }} />
-          {workspace.users.map((user: User, index: number) => {
-            return (
-              <UserHoverCard profile={user} workspaceOwner={index == 0}>
-                <Avatar src={user.avatar} component={Link} to={`/user/${user.username}`} />
-              </UserHoverCard>
-            );
-          })}
+          {(workspace.expand.collaborators ?? []).concat([workspace.expand.owner]).map((user, index) => (
+            <UserHoverCard profile={user} workspaceOwner={index == 0} key={user.id}>
+              <Avatar src={pocketbase.getFileUrl(user, user.avatar)} component={Link} to={`/user/${user.username}`} />
+            </UserHoverCard>
+          ))}
         </Group>
         <Divider my="lg" />
         <Title order={3}>Overview</Title>
         <Grid mt="md" mb="xl">
-          {data.map((item) => (
-            <Grid.Col span={{ base: 12, xs: 6, md: 3 }}>
+          {Object.entries(data).map(([key, value]) => (
+            <Grid.Col span={{ base: 12, xs: 6, md: 3 }} key={key}>
               <Box p="lg" bg="dark" style={{ borderRadius: "var(--mantine-radius-md)" }}>
-                <Title order={3}>{item.title}</Title>
-                <Text style={{ fontSize: "calc(1.5*var(--mantine-font-size-xl))" }}>{item.number}</Text>
+                <Title order={3}>{key}</Title>
+                <Text style={{ fontSize: "calc(1.5*var(--mantine-font-size-xl))" }}>{value}</Text>
               </Box>
             </Grid.Col>
           ))}
@@ -84,8 +70,8 @@ export default function WorkspaceOverview() {
           Instances
         </Title>
         <Grid mt="md" mb="xl">
-          {workspace.instances.map((item) => (
-            <Grid.Col span={{ base: 12, md: 6 }}>
+          {(workspace.expand.instances ?? []).map((item) => (
+            <Grid.Col span={{ base: 12, md: 6 }} key={item.id}>
               <Box p="lg" bg="dark" style={{ borderRadius: "var(--mantine-radius-md)" }}>
                 <Flex justify="space-between" direction={isMobile ? "column" : "row"}>
                   <Flex direction="column" justify="space-between" mr={isMobile ? "0" : "sm"} mb={isMobile ? "sm" : "0"}>
@@ -99,7 +85,7 @@ export default function WorkspaceOverview() {
                         </Tooltip>
                       )}
                     </Group>
-                    <Group gap="xs">
+                    {/* <Group gap="xs">
                       <Text>
                         <span style={{ color: "var(--mantine-color-dimmed)" }}>IP:</span> 20.20.20.20
                       </Text>
@@ -112,7 +98,7 @@ export default function WorkspaceOverview() {
                           </Tooltip>
                         )}
                       </CopyButton>
-                    </Group>
+                    </Group> */}
                   </Flex>
                   <Box>
                     <Text>

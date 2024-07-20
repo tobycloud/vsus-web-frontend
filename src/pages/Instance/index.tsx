@@ -27,7 +27,7 @@ export default function Instance() {
         style={{ textDecoration: "none", color: "var(--mantine-color-primary-text)" }}
       >
         <IconChevronLeft size={20} />
-        <Text>{instance.workspace_name}</Text>
+        <Text>{instance.expand.workspace.name}</Text>
       </Group>
 
       <Flex justify="space-between">
@@ -41,8 +41,8 @@ export default function Instance() {
       </Flex>
       <Group mt="lg" gap="xs">
         <IconUserCode size={25} style={{ color: "var(--mantine-color-dimmed)" }} />
-        <UserHoverCard profile={instance.owner} workspaceOwner>
-          <Avatar src={instance.owner.avatar} component={Link} to={`/user/${instance.owner.username}`} />
+        <UserHoverCard profile={instance.expand.owner} workspaceOwner>
+          <Avatar src={instance.expand.owner.avatar} component={Link} to={`/user/${instance.expand.owner.username}`} />
         </UserHoverCard>
       </Group>
       <Divider my="lg" />

@@ -1,9 +1,5 @@
-import { Avatar, Box, Button, Container, Divider, Flex, Group, Menu, Text, Title, UnstyledButton, rem } from "@mantine/core";
-import { IconAdjustments, IconDots, IconMessageExclamation, IconMessageOff, IconMoodSmile, IconUserMinus } from "@tabler/icons-react";
-import { useEffect, useState } from "preact/hooks";
-import { Link } from "react-router-dom";
-import UserHoverCard from "../../components/UserHoverCard";
-import { getAvatar, getUserFromUsername } from "../../database";
+import { Container, Divider, Flex, Title } from "@mantine/core";
+import { useEffect } from "preact/hooks";
 import { User } from "../../database/models";
 import { setDocumentTitle } from "../../utils";
 import Loading from "../Loading";
@@ -13,29 +9,19 @@ export default function Home() {
     setDocumentTitle("Home");
   }, []);
 
-  const tobyPostReactions = {
-    "😭": 26,
-    "😂": 5,
-    "🤯": 3,
-  };
+  // const tobyPostReactions = {
+  //   "😭": 26,
+  //   "😂": 5,
+  //   "🤯": 3,
+  // };
 
   // Things to note:
   // - Eggu is not sure if multiple reactions is a good idea, and how to implement it in PB
   // - Eggu wants these posts to be the same as those on GitHub, not those on X => Displaying activities instead of self-posted posts
   // - Eggu wants to display the activities in a timeline (that is, chronological order)
 
-  const [user, setUser] = useState<User>();
-
-  useEffect(() => {
-    const setToby = async () => {
-      const userList = await getUserFromUsername("toby");
-      const user = userList[0] as unknown as User;
-      user.avatar = await getAvatar(user);
-      setUser(user);
-    };
-
-    setToby();
-  }, []);
+  // @ts-ignore for now
+  const user: User | undefined = {};
 
   if (!user) return <Loading />;
 
@@ -43,12 +29,12 @@ export default function Home() {
     <Container>
       <Flex justify="space-between">
         <Title order={2}>Home</Title>
-        <Button variant="light" color="primary" radius="md" leftSection={<IconAdjustments size={20} />} fw={500}>
+        {/* <Button variant="light" color="primary" radius="md" leftSection={<IconAdjustments size={20} />} fw={500}>
           Filter
-        </Button>
+        </Button> */}
       </Flex>
       <Divider my="lg" />
-      <Box p="lg" bg="dark" style={{ borderRadius: "var(--mantine-radius-lg)" }} mb="lg">
+      {/* <Box p="lg" bg="dark" style={{ borderRadius: "var(--mantine-radius-lg)" }} mb="lg">
         <Flex justify="space-between" align="center">
           <Group gap="sm">
             <UserHoverCard profile={user}>
@@ -106,7 +92,7 @@ export default function Home() {
             </Button>
           ))}
         </Group>
-      </Box>
+      </Box> */}
     </Container>
   );
 }
