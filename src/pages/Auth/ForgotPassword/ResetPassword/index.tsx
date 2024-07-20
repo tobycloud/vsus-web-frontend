@@ -28,7 +28,7 @@ export default function ResetPassword() {
     setDocumentTitle("Set new password");
   }, []);
 
-  if (!token) navigate("/auth/signin");
+  if (!token) navigate("/auth/signin", { replace: true });
 
   return (
     <AuthLayout title="Reset your password">
@@ -38,7 +38,7 @@ export default function ResetPassword() {
         onSubmit={form.onSubmit(async () => {
           try {
             await pocketbase.collection("users").confirmPasswordReset(token!, form.values.password, form.values.password2);
-            navigate("/auth/signin");
+            navigate("/auth/signin", { replace: true });
           } catch (error) {
             console.error(error);
           }
