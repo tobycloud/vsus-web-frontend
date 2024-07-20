@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { ActionIcon, Avatar, Box, Code, Flex, Group, Indicator, Text, Tooltip, UnstyledButton, rem } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { spotlight } from "@mantine/spotlight";
@@ -7,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import pocketbase, { getAvatar } from "../../database";
 import { User } from "../../database/models";
 import { borderLine } from "../../utils";
+import CreateInstanceModal from "../CreateInstanceModal";
 import CreateNewDropdown from "../CreateNewDropdown";
 import CreateWorkspaceModal from "../CreateWorkspaceModal";
 import LeftNavBar from "../LeftNavBar";
@@ -31,6 +33,8 @@ export function Header() {
 
   const createWorkspace = CreateWorkspaceModal({ user });
 
+  const createInstance = CreateInstanceModal({ user });
+
   useEffect(() => {
     if (window.location.pathname === "/auth/signin") return;
 
@@ -51,6 +55,7 @@ export function Header() {
   return (
     <>
       {createWorkspace.element}
+      {createInstance.element}
       <header className={classes.header} style={{ borderBottom: borderLine }}>
         <Flex justify="space-between" h="100%">
           <Group flex={!isMobile ? 1.5 : "none"}>
@@ -78,7 +83,7 @@ export function Header() {
               <IconSearch size={20} />
             </ActionIcon>
             <Box visibleFrom="xs">
-              <CreateNewDropdown newWorkspace={createWorkspace.open} />
+              <CreateNewDropdown newWorkspace={createWorkspace.open} newInstance={createInstance.open} />
             </Box>
             <Indicator color="red" size={15} withBorder disabled>
               <Tooltip label="You have no unread notifications" color="primary" openDelay={250}>

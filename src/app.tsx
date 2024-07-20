@@ -2,7 +2,7 @@ import { MantineProvider } from "@mantine/core";
 import { RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./app.css";
 
-import { getAvatar, getBanner, getUser, getUserFromUsername, getWorkspace } from "./database";
+import { getAvatar, getBanner, getInstance, getUser, getUserFromUsername, getWorkspace } from "./database";
 
 import Content from "./components/Content";
 import AuthContent from "./components/Content/Auth";
@@ -98,9 +98,37 @@ const routes: RouteObject[] = [
               })
             )) as User[];
             workspace.users = [ownerUser, ...collaboratorsUsers];
+            const instances = await Promise.all(
+              workspace.instances.map(async (instanceId: string) => {
+                const instance = await getInstance(instanceId);
+                instance.owner = await getUser(instance.owner);
+                return instance;
+              })
+            );
+            workspace.instances = instances;
             return { workspace: workspace };
           } catch (error) {
             return { workspace: null };
+          }
+        },
+      },
+      {
+        path: "/instance/:instanceId",
+        element: <Instance />,
+        loader: async ({ params }) => {
+          const { instanceId } = params;
+          if (!instanceId) return { instance: null };
+
+          try {
+            const instance = await getInstance(instanceId);
+            const ownerUser = (await getUser(instance.owner)) as unknown as User;
+            ownerUser.avatar = await getAvatar(ownerUser);
+            instance.owner = ownerUser;
+            const workspace = await getWorkspace(instance.workspace);
+            instance.workspace_name = workspace.name;
+            return { instance: instance };
+          } catch (error) {
+            return { instance: null };
           }
         },
       },
@@ -123,16 +151,7 @@ const routes: RouteObject[] = [
           }
         },
       },
-      {
-        path: "/instance/:id",
-        element: <Instance />,
-        loader: async ({ params }) => {
-          const { id } = params;
-          if (!id) return { instance: null };
 
-          return { instance: null }; // will be replaced with actual data
-        },
-      },
       {
         path: "*",
         element: <Error404 />,

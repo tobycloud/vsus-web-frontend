@@ -14,6 +14,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import pocketbase from "../../database";
 import { User } from "../../database/models";
+import CreateInstanceModal from "../CreateInstanceModal";
 import CreateNewDropdown from "../CreateNewDropdown";
 import CreateWorkspaceModal from "../CreateWorkspaceModal";
 
@@ -34,10 +35,12 @@ export default function RightNavBar({
   const navigate = useNavigate();
   const user = pocketbase.authStore.model as User;
   const createWorkspace = CreateWorkspaceModal({ user });
+  const createInstance = CreateInstanceModal({ user });
 
   return (
     <>
       {createWorkspace.element}
+      {createInstance.element}
       <Drawer.Root opened={opened} onClose={close} overlayProps={{ backgroundOpacity: 0.5, blur: 4 }} position="right" size="xs">
         <Drawer.Overlay />
         <Drawer.Content>
@@ -62,6 +65,10 @@ export default function RightNavBar({
                 <CreateNewDropdown
                   newWorkspace={() => {
                     createWorkspace.open();
+                    close();
+                  }}
+                  newInstance={() => {
+                    createInstance.open();
                     close();
                   }}
                 />

@@ -28,7 +28,18 @@ export interface Workspace {
   owner: User;
   collaborators: User[];
   users: User[];
+  instances: Instance[];
   name: string;
   created: string;
   updated: string;
+}
+
+export interface Instance {
+  id: string;
+  owner: User;
+  workspace: string;
+  workspace_name: string;
+  name: string;
+  docker_id: string;
+  on_off: boolean;
 }

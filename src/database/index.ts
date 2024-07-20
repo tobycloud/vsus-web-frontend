@@ -11,7 +11,7 @@ export async function userSignIn(email: string, password: string) {
 }
 
 export async function userSignInOAuth2(provider: string) {
-  let w = window.open();
+  const w = window.open();
   pocketbase.authStore.clear();
   await pocketbase.collection("users").authWithOAuth2({
     provider,
@@ -21,7 +21,7 @@ export async function userSignInOAuth2(provider: string) {
   });
 }
 
-export async function userSignUp(data: Object) {
+export async function userSignUp(data: object) {
   pocketbase.authStore.clear();
   await pocketbase.collection("users").create(data);
 }
@@ -57,6 +57,14 @@ export async function createWorkspace(user: User, name: string) {
   });
 }
 
+export async function createInstance(user: User, name: string, workspace: string) {
+  return await pocketbase.collection("instances").create({
+    name,
+    owner: user.id,
+    workspace,
+  });
+}
+
 export async function getWorkspace(id: string) {
   return await pocketbase.collection("workspaces").getOne(id);
 }
@@ -68,4 +76,8 @@ export async function getLimitWorkspaces(user: User, min: number, max: number) {
     requestKey: null,
   });
   return listResult.items;
+}
+
+export async function getInstance(id: string) {
+  return await pocketbase.collection("instances").getOne(id);
 }

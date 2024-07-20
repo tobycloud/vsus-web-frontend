@@ -1,24 +1,39 @@
 import { ActionIcon, Avatar, Box, Button, Container, Divider, Flex, Grid, Group, rem, Text, Title } from "@mantine/core";
 import { IconAdjustments, IconChevronLeft, IconCircleFilled, IconServer2, IconUserCode } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
+import { useEffect } from "preact/hooks";
+import { Link, useLoaderData } from "react-router-dom";
 import UserHoverCard from "../../components/UserHoverCard";
-import pocketbase from "../../database";
-import { User } from "../../database/models";
+import type { Instance } from "../../database/models";
+import { setDocumentTitle } from "../../utils";
+import Error404 from "../Error/404";
 
 export default function Instance() {
-  const user = pocketbase.authStore.model as User;
+  const { instance } = useLoaderData() as { instance: Instance };
+
+  if (!instance) return <Error404 />;
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    setDocumentTitle(`${instance.name} | Instance`);
+  }, [instance]);
 
   return (
     <Container size="xl">
-      <Group mb="lg" gap="xs" component={Link} to="/workspace/" style={{ textDecoration: "none", color: "var(--mantine-color-primary-text)" }}>
+      <Group
+        mb="lg"
+        gap="xs"
+        component={Link}
+        to={`/workspace/${instance.workspace}`}
+        style={{ textDecoration: "none", color: "var(--mantine-color-primary-text)" }}
+      >
         <IconChevronLeft size={20} />
-        <Text>Workspace's Name</Text>
+        <Text>{instance.workspace_name}</Text>
       </Group>
 
       <Flex justify="space-between">
         <Group w="100%" mr="lg">
           <IconServer2 size={40} />
-          <Title order={2}>Name</Title>
+          <Title order={2}>{instance.name}</Title>
         </Group>
         <ActionIcon variant="light" size="lg" radius="sm" aria-label="Workspace's Option">
           <IconAdjustments size={20} />
@@ -26,8 +41,8 @@ export default function Instance() {
       </Flex>
       <Group mt="lg" gap="xs">
         <IconUserCode size={25} style={{ color: "var(--mantine-color-dimmed)" }} />
-        <UserHoverCard profile={user} workspaceOwner>
-          <Avatar src={user.avatar} component={Link} to={`/user/${user.username}`} />
+        <UserHoverCard profile={instance.owner} workspaceOwner>
+          <Avatar src={instance.owner.avatar} component={Link} to={`/user/${instance.owner.username}`} />
         </UserHoverCard>
       </Group>
       <Divider my="lg" />
@@ -35,9 +50,11 @@ export default function Instance() {
         <Grid.Col span={{ base: 12, xs: 6 }}>
           <Box p="lg" bg="dark" style={{ borderRadius: "var(--mantine-radius-md)" }} h="100%">
             <Title order={3}>Status</Title>
-            <Group gap="xs">
-              <Text fz="xl">Offline</Text>
-              <IconCircleFilled style={{ width: rem(32), color: "var(--mantine-color-dimmed)" }} />
+            <Group gap="xs" mt="xs">
+              <Text fz="xl">{instance.on_off ? "Online" : "Offline"}</Text>
+              <IconCircleFilled
+                style={{ width: rem(16), color: instance.on_off ? "var(--mantine-color-green-text)" : "var(--mantine-color-dimmed)" }}
+              />
             </Group>
           </Box>
         </Grid.Col>
