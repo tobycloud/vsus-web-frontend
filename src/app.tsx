@@ -14,6 +14,7 @@ import SignIn from "./pages/Auth/SignIn";
 import SignUp from "./pages/Auth/SignUp";
 import Error404 from "./pages/Error/404";
 import Home from "./pages/Home";
+import Instance from "./pages/Instance";
 import Profile from "./pages/Profile";
 import SettingsAccount from "./pages/Settings/Account";
 import SettingsAccount2FA from "./pages/Settings/Account/2FA";
@@ -120,6 +121,16 @@ const routes: RouteObject[] = [
           } catch (error) {
             return { profile: null };
           }
+        },
+      },
+      {
+        path: "/instance/:id",
+        element: <Instance />,
+        loader: async ({ params }) => {
+          const { id } = params;
+          if (!id) return { instance: null };
+
+          return { instance: null }; // will be replaced with actual data
         },
       },
       {

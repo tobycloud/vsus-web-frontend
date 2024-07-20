@@ -52,7 +52,6 @@ export default function WorkspaceOverview() {
       <Group mt="lg" gap="xs">
         <IconUserCode size={25} style={{ color: "var(--mantine-color-dimmed)" }} />
         {workspace.users.map((user: User, index: number) => {
-          console.log(user);
           return (
             <UserHoverCard profile={user} workspaceOwner={index == 0}>
               <Avatar src={user.avatar} component={Link} to={`/user/${user.username}`} />
