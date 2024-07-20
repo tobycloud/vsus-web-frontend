@@ -3,12 +3,13 @@ import { IconAdjustments, IconChevronLeft, IconCircleFilled, IconServer2, IconUs
 import { useEffect } from "preact/hooks";
 import { Link, useLoaderData } from "react-router-dom";
 import UserHoverCard from "../../components/UserHoverCard";
-import type { Instance } from "../../database/models";
+import pocketbase from "../../database";
+import type { PBInstance } from "../../database/models";
 import { setDocumentTitle } from "../../utils";
 import Error404 from "../Error/404";
 
 export default function Instance() {
-  const { instance } = useLoaderData() as { instance: Instance };
+  const instance = useLoaderData() as PBInstance | undefined;
 
   if (!instance) return <Error404 />;
 
@@ -42,7 +43,11 @@ export default function Instance() {
       <Group mt="lg" gap="xs">
         <IconUserCode size={25} style={{ color: "var(--mantine-color-dimmed)" }} />
         <UserHoverCard profile={instance.expand.owner} workspaceOwner>
-          <Avatar src={instance.expand.owner.avatar} component={Link} to={`/user/${instance.expand.owner.username}`} />
+          <Avatar
+            src={pocketbase.getFileUrl(instance.expand.owner, instance.expand.owner.avatar)}
+            component={Link}
+            to={`/user/${instance.expand.owner.username}`}
+          />
         </UserHoverCard>
       </Group>
       <Divider my="lg" />

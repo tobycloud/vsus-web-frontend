@@ -29,7 +29,7 @@ export default function Profile() {
   return (
     <Box w="100%" style={{ transform: "translateY(-32px)" }}>
       <Image
-        src={!!profile.banner ? profile.banner : "/images/default-banner.png"}
+        src={!!profile.banner ? pocketbase.getFileUrl(profile, profile.banner) : "/images/default-banner.png"}
         alt="Banner"
         w="100%"
         h={isMobile ? 200 : 300}
@@ -55,7 +55,7 @@ export default function Profile() {
             }}
           >
             <Box h={55} style={{ position: "relative", insetBlockStart: "-95px" }}>
-              <Avatar src={profile.avatar} w={150} h={150} />
+              <Avatar src={pocketbase.getFileUrl(profile, profile.avatar)} w={150} h={150} />
             </Box>
             <Title order={2} mt="lg" fw={600} maw={350} ta="center">
               {profile.name != "" ? profile.name : profile.username}

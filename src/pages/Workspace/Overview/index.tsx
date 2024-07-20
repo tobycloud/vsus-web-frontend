@@ -48,7 +48,7 @@ export default function WorkspaceOverview() {
         </Flex>
         <Group mt="lg" gap="xs">
           <IconUserCode size={25} style={{ color: "var(--mantine-color-dimmed)" }} />
-          {(workspace.expand.collaborators ?? []).concat([workspace.expand.owner]).map((user, index) => (
+          {[workspace.expand.owner].concat(workspace.expand.collaborators ?? []).map((user, index) => (
             <UserHoverCard profile={user} workspaceOwner={index == 0} key={user.id}>
               <Avatar src={pocketbase.getFileUrl(user, user.avatar)} component={Link} to={`/user/${user.username}`} />
             </UserHoverCard>

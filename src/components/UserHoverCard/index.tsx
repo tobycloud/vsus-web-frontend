@@ -22,7 +22,7 @@ export default function UserHoverCard({
       <HoverCard.Dropdown bg="dark">
         <Box maw={350}>
           <Group gap="xs" component={Link} to={`/user/${profile.username}`} style={{ textDecoration: "none" }} w="max-content">
-            <Avatar src={profile.avatar} alt={profile.username} radius="xl" size="md" />
+            <Avatar src={pocketbase.getFileUrl(profile, profile.avatar)} alt={profile.username} radius="xl" size="md" />
             <Box>
               <Text size="lg" lineClamp={1} c="white" maw={320}>
                 {profile.username}

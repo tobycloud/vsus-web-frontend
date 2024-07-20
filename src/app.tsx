@@ -110,7 +110,7 @@ const routes: RouteObject[] = [
           if (!username) return;
 
           try {
-            return queryClient.fetchQuery({ queryKey: ["user", username], queryFn: () => getUserByUsername(username) });
+            return await queryClient.fetchQuery({ queryKey: ["user", username], queryFn: () => getUserByUsername(username) });
           } catch (error) {
             return;
           }
@@ -124,7 +124,7 @@ const routes: RouteObject[] = [
           if (!id) return;
 
           try {
-            return queryClient.fetchQuery({ queryKey: ["instance", id], queryFn: () => getInstance(id) });
+            return await queryClient.fetchQuery({ queryKey: ["instance", id], queryFn: () => getInstance(id) });
           } catch (error) {
             return;
           }

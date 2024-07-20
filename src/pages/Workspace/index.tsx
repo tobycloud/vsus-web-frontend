@@ -57,20 +57,23 @@ export default function WorkspaceHome() {
                   </Title>
                 </Group>
                 <Avatar.Group>
-                  {item.avatar.slice(0, 2).map((avatar: string) => (
-                    <Avatar src={avatar} className={classes.avatar} />
-                  ))}
-                  {item.avatar.length > 2 && (
+                  {[item.expand.owner]
+                    .concat(item.expand.collaborators ?? [])
+                    .slice(0, 2)
+                    .map((person) => (
+                      <Avatar src={pocketbase.getFileUrl(person, person.avatar)} className={classes.avatar} />
+                    ))}
+                  {[item.expand.owner].concat(item.expand.collaborators ?? []).length > 2 && (
                     <Box style={{ position: "relative" }}>
                       <Avatar
                         style={{
-                          background: `url(${item.avatar[2]})`,
+                          background: `url(${item.expand.collaborators![1]})`,
                           backgroundSize: "cover",
                         }}
                         className={classes.avatar + " " + classes.andMore}
                       >
                         <Text c="white" style={{ position: "relative", zIndex: 2 }}>
-                          +{item.avatar.length - 2}
+                          +{[item.expand.owner].concat(item.expand.collaborators!).length - 2}
                         </Text>
                       </Avatar>
                     </Box>
