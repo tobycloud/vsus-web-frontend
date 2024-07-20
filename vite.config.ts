@@ -13,7 +13,7 @@ export default defineConfig({
               return id.toString().split("node_modules/.pnpm/")[1].split("@")[0].replace("+", "-").toString();
             }
 
-            return id.toString().split("node_modules/")[1].replace("/", "-").toString();
+            return id.toString().split("node_modules/")[1].split("/")[0].toString();
           }
         },
       },
