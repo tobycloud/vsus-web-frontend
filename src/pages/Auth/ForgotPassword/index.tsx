@@ -51,13 +51,13 @@ export default function ForgotPassword() {
           {...form.getInputProps("email")}
         />
         <Button variant="light" color="vsus-button" mt="lg" w="100%" type="submit" disabled={gettingCode || !form.values.email.trim()}>
-          Get reset code
+          Send reset link
         </Button>
       </Box>
       <Text size="sm" weight={700} align="center" mt="xl">
-        Remembered your password? Awesome!{" "}
+        Remembered your password? Awesome! Let's{" "}
         <Link to="/auth/signin" style={{ color: "var(--mantine-color-vsus-text-7)", textDecoration: "none" }}>
-          Sign in
+          sign in
         </Link>
       </Text>
     </AuthLayout>

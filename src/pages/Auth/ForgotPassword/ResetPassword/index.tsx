@@ -1,13 +1,18 @@
 import { Box, Button, PasswordInput, Text } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
 import { IconKey, IconReload } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
+import { useEffect } from "preact/hooks";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import pocketbase from "../../../../database";
+import { setDocumentTitle } from "../../../../utils";
 import classes from "../../index.module.css";
 import AuthLayout from "../../Layout";
-import { useEffect } from "preact/hooks";
-import { setDocumentTitle } from "../../../../utils";
 
 export default function ResetPassword() {
+  const navigate = useNavigate();
+
+  const { token } = useLoaderData() as { token?: string };
+
   const form = useForm({
     initialValues: {
       password: "",
@@ -20,12 +25,25 @@ export default function ResetPassword() {
   });
 
   useEffect(() => {
-    setDocumentTitle("Forgot password");
+    setDocumentTitle("Set new password");
   }, []);
+
+  if (!token) navigate("/auth/signin");
 
   return (
     <AuthLayout title="Reset your password">
-      <Box component="form" className={classes.inputBox} onSubmit={form.onSubmit(async () => {})}>
+      <Box
+        component="form"
+        className={classes.inputBox}
+        onSubmit={form.onSubmit(async () => {
+          try {
+            await pocketbase.collection("users").confirmPasswordReset(token!, form.values.password, form.values.password2);
+            navigate("/auth/signin");
+          } catch (error) {
+            console.error(error);
+          }
+        })}
+      >
         <PasswordInput
           variant="filled"
           required

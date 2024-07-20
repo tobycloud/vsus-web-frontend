@@ -86,8 +86,10 @@ const routes: RouteObject[] = [
         element: <EnterResetPasswordCode />,
       },
       {
-        path: "/auth/forgot-password/reset-password",
+        path: "/auth/forgot-password/confirm/:token",
         element: <ResetPassword />,
+
+        loader: ({ params }): { token?: string } => ({ token: params.token }),
       },
     ],
   },
