@@ -82,11 +82,10 @@ export default function RightNavBar({ opened, close }: { opened: boolean; close:
             />
             <NavLink
               component={Link}
-              to="/"
+              to="/instance"
               label="Your instances"
               leftSection={<IconServer2 size="1rem" stroke={1.5} />}
               onClick={() => close()}
-              disabled
             />
             <Divider mt={10} mb={10} />
             <NavLink component={Link} to="/" label="Upgrade" leftSection={<IconUpload size="1rem" stroke={1.5} />} onClick={() => close()} disabled />

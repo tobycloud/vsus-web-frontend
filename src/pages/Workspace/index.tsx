@@ -67,7 +67,7 @@ export default function WorkspaceHome() {
                     <Box style={{ position: "relative" }}>
                       <Avatar
                         style={{
-                          background: `url(${item.expand.collaborators![1]})`,
+                          background: `url(${pocketbase.getFileUrl(item.expand.collaborators![1], item.expand.collaborators![1].avatar)})`,
                           backgroundSize: "cover",
                         }}
                         className={classes.avatar + " " + classes.andMore}

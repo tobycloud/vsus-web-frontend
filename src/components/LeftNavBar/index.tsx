@@ -67,10 +67,10 @@ export default function LeftNavBar({ opened, close }: { opened: boolean; close: 
                 © {new Date().getFullYear()} DaCloud™
               </Text>
               <Group mt="md">
-                <Text size="xs" c="vsus-natural" component={Link} to="https://vsus.app/tos" target="_blank">
+                <Text size="xs" c="vsus-natural" component={Link} to="https://vsus.app/docs/terms-of-service" target="_blank">
                   Terms
                 </Text>
-                <Text size="xs" c="vsus-natural" component={Link} to="https://vsus.app/privacy" target="_blank">
+                <Text size="xs" c="vsus-natural" component={Link} to="https://vsus.app/docs/privacy-policy" target="_blank">
                   Privacy
                 </Text>
               </Group>

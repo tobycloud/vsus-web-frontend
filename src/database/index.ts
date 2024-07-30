@@ -1,7 +1,7 @@
 import PocketBase, { ListResult, RecordListOptions } from "pocketbase";
 import { PBInstance, PBUser, PBWorkspace, User } from "./models";
 
-const pocketbase = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+const pocketbase = new PocketBase("https://pocketbase.vsus.app");
 export default pocketbase;
 
 export async function userSignIn(email: string, password: string) {
@@ -45,6 +45,15 @@ export async function getUserWorkspaces(
   return await pocketbase
     .collection<PBWorkspace>("workspaces")
     .getList(options?.page ?? 0, options?.perPage ?? 500, { filter: `owner = "${user.id}"`, expand: "owner,collaborators,instances", ...options });
+}
+
+export async function getUserInstances(
+  user: PBUser,
+  options?: RecordListOptions & { page?: number; perPage?: number }
+): Promise<ListResult<PBInstance>> {
+  return await pocketbase
+    .collection<PBInstance>("instances")
+    .getList(options?.page ?? 0, options?.perPage ?? 500, { filter: `owner = "${user.id}"`, expand: "owner,workspace", ...options });
 }
 
 export async function createWorkspace(user: PBUser, name: string): Promise<PBWorkspace> {
